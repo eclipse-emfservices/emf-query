@@ -1,0 +1,16 @@
+#URL to Eclipse zip to be downloaded
+eclipseURL=@eclipseURL@
+#Eclipse file name
+eclipseFile=@eclipseFile@
+# Eclipse build URL
+eclipseBuildURL=@eclipseBuildURL@
+#Eclipse details
+baseos=@eclipseOS@
+basews=@eclipseWS@
+basearch=x86
+#URL to EMF zip to be downloaded
+emfURL=@emfURL@
+#EMF file name
+emfFile=@emfFile@
+#EMF build URL
+emfBuildURL=@emfBuildURL@

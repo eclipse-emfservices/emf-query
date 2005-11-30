@@ -48,23 +48,7 @@
 		</logFile>
 	-->	
 	
-   <logFile name="plugins/antlr_*/*.bin.log">
-      <effectedFile id="SDK"></effectedFile>
-      <effectedFile id="UML2RUN"></effectedFile>
-   </logFile>
-   <logFile name="plugins/org.eclipse.emf.query_*/*.bin.log">
-      <effectedFile id="SDK"></effectedFile>
-      <effectedFile id="UML2RUN"></effectedFile>
-   </logFile>
-   <logFile name="plugins/org.eclipse.emf.query.examples_*/*.bin.log">
-      <effectedFile id="EX"></effectedFile>
-   </logFile>
-   <logFile name="plugins/org.eclipse.emf.query.examples.interpreter_*/*.bin.log">
-      <effectedFile id="EX"></effectedFile>
-   </logFile>
-   <logFile name="plugins/org.eclipse.emf.query.tests_*/*.bin.log">
-      <effectedFile id="T"></effectedFile>
-   </logFile>
+@entries@
 
 	</logFiles>
 </topLevel>

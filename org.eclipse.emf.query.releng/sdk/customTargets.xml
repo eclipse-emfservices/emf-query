@@ -1,0 +1,250 @@
+<project name="Build specific targets and properties" default="noDefault" basedir=".">
+
+	<!-- ===================================================================== -->
+	<!-- Run a given ${target} on all elements being built -->
+	<!-- ===================================================================== -->
+	<target name="allElements">
+		<ant antfile="${genericTargets}" target="${target}">
+			<property name="type" value="feature" />
+			<property name="id" value="org.eclipse.emf.query.sdk" />
+		</ant>
+	</target>
+
+	<!-- ===================================================================== -->
+	<!-- Targets to assemble the built elements for particular configurations  -->
+	<!-- These generally call the generated assemble scripts (named in -->
+	<!-- ${assembleScriptName}) but may also add pre and post processing -->
+	<!-- Add one target for each root element and each configuration -->
+	<!-- ===================================================================== -->
+
+	<target name="assemble.org.eclipse.emf.query.sdk">
+		<property name="archiveName" value="emft-query-SDK-${buildAlias}.zip" />
+		<ant antfile="${assembleScriptName}" />
+		<!-- ADD POST STEPS -->
+	</target>
+
+	<!-- ===================================================================== -->
+	<!-- Check out map files from correct repository -->
+	<!-- Replace values for cvsRoot, package and mapVersionTag as desired. -->
+	<!-- ===================================================================== -->
+	<target name="checkLocal">
+		<available property="mapsLocal" file="${buildDirectory}/maps/org.eclipse.emft.query" />
+	</target>
+
+	<target name="getMapFiles" depends="checkLocal" unless="mapsLocal">
+
+		<!-- ***  change the repo info -->
+		<property name="mapCvsRoot" value=":${cvsReadProtocol}:${cvsReadUser}@${cvsHost}:${cvsRep}" />
+
+		<property name="mapVersionTag" value="HEAD" />
+
+		<cvs cvsRsh="ssh" cvsRoot="${mapCvsRoot}" tag="${mapVersionTag}" package="org.eclipse.emft.query.releng/maps" dest="${buildDirectory}/maps/org.eclipse.emft.query" />
+		<copy todir="${buildDirectory}/maps/org.eclipse.emft.query/CVS" overwrite="true">
+			<fileset dir="${buildDirectory}/maps/org.eclipse.emft.query/org.eclipse.emft.query.releng/maps/CVS" />
+		</copy>
+		<copy todir="${buildDirectory}/maps/org.eclipse.emft.query" overwrite="true">
+			<fileset dir="${buildDirectory}/maps/org.eclipse.emft.query/org.eclipse.emft.query.releng/maps" />
+		</copy>
+		<delete dir="${buildDirectory}/maps/org.eclipse.emft.query/org.eclipse.emft.query.releng" />
+
+		<!--tag the map files project-->
+		<antcall target="tagMapFiles" />
+	</target>
+
+	<target name="tagMapFiles" if="tagMaps">
+		<cvs cvsRsh="ssh" dest="${buildDirectory}/maps/org.eclipse.emft.query" command="tag v${timestamp}" />
+	</target>
+
+	<!-- ===================================================================== -->
+	<!-- Steps to do before setup -->
+	<!-- ===================================================================== -->
+	<target name="preSetup">
+	</target>
+
+	<!-- ===================================================================== -->
+	<!-- Steps to do after setup but before starting the build proper -->
+	<!-- ===================================================================== -->
+	<target name="postSetup">
+		<available file="${buildDirectory}/plugins/org.eclipse.platform/plugin.xml" property="eclipseExists" />
+		<antcall target="getEclipse" />
+		<available file="${buildDirectory}/plugins/org.eclipse.emf.ecore/plugin.xml" property="emfExists" />
+		<antcall target="getEMF" />
+	</target>
+
+	<!-- ===================================================================== -->
+	<!-- Steps to do before fetching the build elements -->
+	<!-- ===================================================================== -->
+	<target name="preFetch">
+	</target>
+
+	<!-- ===================================================================== -->
+	<!-- Steps to do after the fetch -->
+	<!-- ===================================================================== -->
+	<target name="postFetch">
+		<replace dir="${buildDirectory}/plugins" value="${timestamp}" token="@buildid@">
+			<include name="**/about.mappings" />
+		</replace>
+		<echo message="Copy antlr.jar into plugins/antlr/lib ..."/>
+		<copy 
+			todir="${buildDirectory}/plugins/antlr/lib" 
+			file="${buildDirectory}/../../../../antlr.jar" failonerror="true"/>
+	</target>
+
+	<!-- ===================================================================== -->
+	<!-- Steps to do before generating build scripts -->
+	<!-- ===================================================================== -->
+	<target name="preGenerate">
+		<property name="projBuilderDir" location="${buildDirectory}/../org.eclipse.emft.query.releng" />
+		<echo message="projBuilderDir: ${projBuilderDir}" />
+
+		<java classname="org.eclipse.emft.common.build.ChangeBundleClasspath" classpath="${projBuilderDir}/org.eclipse.emft.common.build/emft.common.build.jar">
+			<arg line="-bundlesDirectory ${buildDirectory}/plugins" />
+			<arg line="-verbose" />
+		</java>
+
+	</target>
+
+	<!-- ===================================================================== -->
+	<!-- Steps to do after generating the build scripts -->
+	<!-- ===================================================================== -->
+	<target name="postGenerate">
+		<antcall target="clean" />
+	</target>
+
+	<!-- ===================================================================== -->
+	<!-- Steps to do before assembling -->
+	<!-- ===================================================================== -->
+	<target name="preAssemble">
+	</target>
+
+	<!-- ===================================================================== -->
+	<!-- Steps to do after assembling-->
+	<!-- ===================================================================== -->
+	<target name="postAssemble">
+	</target>
+
+	<!-- ===================================================================== -->
+	<!-- Steps to do before running the build.xmls for the elements being built. -->
+	<!-- ===================================================================== -->
+	<target name="preProcess">
+		<replace dir="${buildDirectory}/plugins" value="${timestamp}" token="@build@">
+			<include name="**/about.mappings" />
+		</replace>
+	</target>
+
+	<!-- ===================================================================== -->
+	<!-- Steps to do after running the build.xmls for the elements being built. -->
+	<!-- ===================================================================== -->
+	<target name="postProcess">
+	</target>
+
+	<!-- ===================================================================== -->
+	<!-- Steps to do after everything is built and assembled -->
+	<!-- (e.g., testing, posting, emailing, ...) -->
+	<!-- ===================================================================== -->
+	<target name="postBuild">
+		<antcall target="gatherLogs" />
+	</target>
+
+	<!-- ===================================================================== -->
+	<!-- Helper targets -->
+	<!-- ===================================================================== -->
+	<target name="gatherLogs">
+		<mkdir dir="${buildDirectory}/${buildLabel}/compilelogs" />
+		<antcall target="allElements">
+			<param name="target" value="gatherLogs" />
+		</antcall>
+
+		<unzip dest="${buildDirectory}/${buildLabel}/compilelogs" overwrite="true">
+			<fileset dir="${buildDirectory}/features/org.eclipse.emf.query.sdk">
+				<include name="*.log.zip" />
+			</fileset>
+		</unzip>
+	</target>
+	<target name="clean" unless="nqueryean">
+		<antcall target="allElements">
+			<param name="target" value="cleanElement" />
+		</antcall>
+	</target>
+
+	<target name="getBaseInit">
+		<taskdef name="stripVersions" classname="org.eclipse.releng.VersionNumberStripper" />
+		<property file="${buildDirectory}/maps/org.eclipse.emft.query/build.cfg" />
+	</target>
+
+	<target name="getEclipse" unless="eclipseExists" depends="getBaseInit">
+		<!-- if there's already an existing eclipse zip by the same name in the dest folder, don't download it again! -->
+		<available file="${downloadsDir}/${eclipseFile}" property="eclipseZipExists" />
+		<antcall target="downloadEclipse" />
+
+		<!-- note: only gzip, zip and bzip2 are supported; compress (.tar.Z) is not -->
+		<condition property="isEclipseFileZip">
+			<contains string="${eclipseFile}" substring=".zip" />
+		</condition>
+		<condition property="isEclipseFileTarGz">
+			<contains string="${eclipseFile}" substring=".tar.gz" />
+		</condition>
+
+		<antcall target="eclipseFileUnZip" />
+		<antcall target="eclipseFileUnTarGz" />
+
+		<stripVersions directory="${buildDirectory}/plugins" />
+
+		<!-- Extract doc.zip so we can create links in the java doc -->
+		<unzip overwrite="true" src="${buildDirectory}/plugins/org.eclipse.platform.doc.isv.jar" dest="${buildDirectory}/plugins/org.eclipse.platform.doc.isv" />
+
+	</target>
+
+	<target name="eclipseFileUnTarGz" if="isEclipseFileTarGz">
+		<untar compression="gzip" src="${downloadsDir}/${eclipseFile}" dest="${buildDirectory}/.." overwrite="true" />
+	</target>
+
+	<target name="eclipseFileUnZip" if="isEclipseFileZip">
+		<unzip src="${downloadsDir}/${eclipseFile}" dest="${buildDirectory}/.." overwrite="true" />
+	</target>
+
+	<target name="downloadEclipse" unless="eclipseZipExists">
+		<get src="${eclipseURL}" dest="${downloadsDir}/${eclipseFile}" usetimestamp="true" />
+		<touch file="${downloadsDir}/${eclipseFile}" />
+	</target>
+
+	<target name="getEMF" unless="emfExists" depends="getBaseInit">
+		<!-- if there's already an existing EMF zip by the same name in the dest folder, don't download it again! -->
+		<available file="${downloadsDir}/${emfFile}" property="emfZipExists" />
+		<antcall target="downloadEMF" />
+
+		<!-- note: only gzip, zip and bzip2 are supported; compress (.tar.Z) is not -->
+		<condition property="isEMFFileZip">
+			<contains string="${emfFile}" substring=".zip" />
+		</condition>
+		<condition property="isEMFFileTarGz">
+			<contains string="${emfFile}" substring=".tar.gz" />
+		</condition>
+
+		<antcall target="emfFileUnZip" />
+		<antcall target="emfFileUnTarGz" />
+
+		<stripVersions directory="${buildDirectory}/plugins" />
+	</target>
+
+	<target name="emfFileUnTarGz" if="isEMFFileTarGz">
+		<untar compression="gzip" src="${downloadsDir}/${emfFile}" dest="${buildDirectory}/.." overwrite="true" />
+	</target>
+
+	<target name="emfFileUnZip" if="isEMFFileZip">
+		<unzip src="${downloadsDir}/${emfFile}" dest="${buildDirectory}/.." overwrite="true" />
+	</target>
+
+	<target name="downloadEMF" unless="emfZipExists">
+		<get src="${emfURL}" dest="${downloadsDir}/${emfFile}" usetimestamp="true" />
+		<touch file="${downloadsDir}/${emfFile}" />
+	</target>
+
+	<!-- ===================================================================== -->
+	<!-- Default target                                                        -->
+	<!-- ===================================================================== -->
+	<target name="noDefault">
+		<echo message="You must specify a target when invoking this file" />
+	</target>
+
+</project>

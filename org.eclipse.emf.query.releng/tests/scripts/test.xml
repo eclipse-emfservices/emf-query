@@ -1,0 +1,101 @@
+<project name="Automated Testing for EMFT" default="all"  basedir="." >
+
+	<!--properties file containing the plugin directory name including version number-->
+	<property file="test.properties" />
+	
+	<property name="buildDirectory" location="${basedir}/../src/eclipse" />
+	<property name="transientPropertiesFile" value="${buildDirectory}/transientProperties.txt" />
+	<available file="${transientPropertiesFile}" type="file" property="transientPropertiesIsAvailable" />
+
+	<!--default directory where test-eclipse will be installed-->
+	<property name="install" value="${basedir}/target" />
+	
+	<!--name that can be added to report name to identify which platform tests results come from-->
+	<property name="platform" value="" />
+
+	<!-- The root of the eclipse installation -->
+	<property name="eclipse-home" value="${install}/eclipse" />
+
+	<!-- The directory that will contain the xml and html results from the tests that are run -->
+ 	<property name="results" value="${basedir}/results" />
+
+	<target name="init">
+	</target>
+
+	<target name="loadTransientProperties" if="transientPropertiesIsAvailable">
+		<property file="${transientPropertiesFile}" />
+	</target>
+
+	<target name="setup" if="clean" description="Reinstall the test Eclipse installation if specified by user">
+		<antcall target="loadTransientProperties"/>
+		<delete dir="${install}" />
+		<mkdir dir="${install}" />
+		
+		<echo message="install: ${install}"/>
+
+		<!--The eclipse SDK must exist before this script is executed-->
+		
+		<property name="downloadsDir" value="."/>
+		<property name="eclipseFile" value="eclipse-SDK-*"/>
+
+		<echo message="downloadsDir: ${downloadsDir}"/>
+		<echo message="eclipseFile: ${eclipseFile}"/>
+
+		<unzip dest="${install}" overwrite="true">
+		    <fileset dir="${downloadsDir}">
+		         <include name="**/${eclipseFile}.zip"/>
+		    </fileset>
+		</unzip>
+
+		<untar compression="gzip" dest="${install}" overwrite="true">
+		    <fileset dir="${downloadsDir}">
+		        <include name="**/${eclipseFile}.tar.gz"/>
+		    </fileset>
+		</untar>
+
+		<unzip dest="${install}" overwrite="true">
+		    <fileset dir=".">
+		        <include name="**/emf*.zip"/>
+		    </fileset>
+		</unzip>
+
+		<unzip dest="${install}" overwrite="true">
+		    <fileset dir=".">
+		        <include name="**/emft-*.zip"/>
+		    </fileset>
+		</unzip>
+
+		<unzip dest="${install}" overwrite="true">
+		    <fileset dir=".">
+		        <include name="**/emft-${subprojectName}-junit-tests-*.zip"/>
+		    </fileset>
+		</unzip>
+
+	</target>
+
+	<target name="runtests" depends="setup" description="Runs ant on the test.xml for a specified plugin.  Requires a property value setting for testPlugin only if test.properties is not available.  The property testPlugin represents a directory name made up of the plugin id and plugin version.  This directory must contain a valid test.xml.">
+		<echo message="Unpack ${eclipse-home}/plugins/${testPlugin}.jar to ${eclipse-home}/plugins/${testPlugin} ... "/>
+		<move file="${eclipse-home}/plugins/${testPlugin}.jar" tofile="${eclipse-home}/plugins/${testPlugin}_.jar"/>
+		<unjar src="${eclipse-home}/plugins/${testPlugin}_.jar" dest="${eclipse-home}/plugins/${testPlugin}"/>
+		<delete file="${eclipse-home}/plugins/${testPlugin}_.jar"/>
+		<echo message="Running text.xml from jarfile ${eclipse-home}/plugins/${testPlugin} ... "/>
+		<ant antfile="${eclipse-home}/plugins/${testPlugin}/test.xml" dir="${eclipse-home}"/>
+		<copy file="${eclipse-home}/${report}.xml" tofile="${results}/xml/${report}_${platform}.xml" />
+	</target>
+
+	<target name="emft" description="Runs the test.xml of the tests plugin">
+		<antcall target="runtests">
+			<param name="testPlugin" value="${org.eclipse.emf.query.tests}" />
+			<param name="report" value="org.eclipse.emf.query.tests" />
+		</antcall>
+	</target>
+
+	<target name="all">
+		<antcall target="emft" />
+		<antcall target="genHtml" />
+	</target>
+	
+	<target name="genHtml" description="Generates HTML results with provided JUNIT.XSL provided">
+		<style style="JUNIT.XSL" basedir="${results}/xml" destdir="${results}/html" />
+	</target>
+</project>
