@@ -7,14 +7,14 @@ sub loadProperties()
 {
 	my $buildConfigFile = shift;
 
-	my @properties = ("cvsHost", "cvsReadProtocol", "cvsReadUser", "cvsWriteUser", "cvsWriteUserReleng", "cvsRep");
+	my @properties = ("cvsHost", "cvsReadProtocol", "cvsReadUser", "cvsWriteUser", "cvsWriteRelengUser", "cvsRep");
 	my $valueByProperty = &getProperties($buildConfigFile, \@properties);
 
 	my $cvsHost         = $valueByProperty->{"cvsHost"};
 	my $cvsReadProtocol = $valueByProperty->{"cvsReadProtocol"};
 	my $cvsReadUser     = $valueByProperty->{"cvsReadUser"};
 	my $cvsWriteUser    = $valueByProperty->{"cvsWriteUser"};
-	my $cvsWriteUserReleng = $valueByProperty->{"cvsWriteUserReleng"};
+	my $cvsWriteRelengUser = $valueByProperty->{"cvsWriteRelengUser"};
 	my $cvsRep       = $valueByProperty->{"cvsRep"};
 
 	$M_TM::SSH_HOST = "$cvsWriteUser\@$cvsHost";

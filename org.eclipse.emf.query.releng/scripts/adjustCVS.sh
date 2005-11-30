@@ -75,7 +75,7 @@ cvsReadProtocol=`$scriptDir/readProperty.sh $repoInfoFile cvsReadProtocol`
 cvsWriteProtocol=`$scriptDir/readProperty.sh $repoInfoFile cvsWriteProtocol`
 cvsReadUser=`$scriptDir/readProperty.sh $repoInfoFile cvsReadUser`
 cvsWriteUser=`$scriptDir/readProperty.sh $repoInfoFile cvsWriteUser`
-cvsWriteUserReleng=`$scriptDir/readProperty.sh $repoInfoFile cvsWriteUserReleng`
+cvsWriteRelengUser=`$scriptDir/readProperty.sh $repoInfoFile cvsWriteRelengUser`
 cvsRep=`$scriptDir/readProperty.sh $repoInfoFile cvsRep`
 
 # Setting environment variables
@@ -167,6 +167,6 @@ if [ $tagBuild != 'false' ]; then
 	cd $baseDir
 	$baseDir/scripts/executeCommand.sh "cvs -q ci -m $buildTag"
 	cd $currentDir
-	$baseDir/scripts/executeCommand.sh "cvs -d :$cvsWriteProtocol:$cvsWriteUserReleng@$cvsHost:$cvsRep -q rtag $projRelengBranchCmd $buildTag org.eclipse.emft/releng/common"
-	$baseDir/scripts/executeCommand.sh "cvs -d :$cvsWriteProtocol:$cvsWriteUserReleng@$cvsHost:$cvsRep -q rtag $projRelengBranchCmd $buildTag org.eclipse.emft/releng/$proj"
+	$baseDir/scripts/executeCommand.sh "cvs -d :$cvsWriteProtocol:$cvsWriteRelengUser@$cvsHost:$cvsRep -q rtag $projRelengBranchCmd $buildTag org.eclipse.emft/releng/common"
+	$baseDir/scripts/executeCommand.sh "cvs -d :$cvsWriteProtocol:$cvsWriteRelengUser@$cvsHost:$cvsRep -q rtag $projRelengBranchCmd $buildTag org.eclipse.emft/releng/$proj"
 fi
