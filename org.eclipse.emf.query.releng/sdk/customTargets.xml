@@ -84,10 +84,6 @@
 		<replace dir="${buildDirectory}/plugins" value="${timestamp}" token="@buildid@">
 			<include name="**/about.mappings" />
 		</replace>
-		<echo message="Copy antlr.jar into plugins/antlr/lib ..."/>
-		<copy 
-			todir="${buildDirectory}/plugins/antlr/lib" 
-			file="${buildDirectory}/../../../../antlr.jar" failonerror="true"/>
 	</target>
 
 	<!-- ===================================================================== -->

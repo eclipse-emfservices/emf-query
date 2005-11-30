@@ -10,7 +10,7 @@
 		</zipType>
 		<zipType name="projsdk">
 			<platform 
-				id="proj2SRC" 
+				id="projSRC" 
 				name="All" 
 				fileName='&lt;a href="emft-query-SDK-@build@.zip"&gt;emft-query-SDK-@build@.zip&lt;/a&gt; &lt;font size="2"&gt;(size:@emft-query-SDK-@build@.zip.size@ - checksum:&lt;a href="emft-query-SDK-@build@.zip.md5"&gt;md5&lt;/a&gt;)&lt;/font&gt;'>
 			</platform>
