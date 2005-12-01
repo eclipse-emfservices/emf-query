@@ -145,8 +145,8 @@ for xml in $xmls; do
 		testsFailed=`cat $xml | grep -c "Failure"`
 		if [ $testsFailed -gt 0 ]; then
 			echo "[relengbuild] Found test failure(s) in $xml!";
-			echo "[relengbuild] Creating 'nqueryean' file to prevent cleanup after build completes."
-			echo "1" > $PWD/../../../nqueryean;
+			echo "[relengbuild] Creating 'noclean' file to prevent cleanup after build completes."
+			echo "1" > $PWD/../../../noclean;
 			break;
 		fi
 	fi

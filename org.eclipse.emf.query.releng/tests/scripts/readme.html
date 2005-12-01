@@ -41,7 +41,7 @@
 <p>1. cd to the <i>testing</i> directory<br>
   2. Run the following script:</p>
 <p><b>runtests [-os &lt;operating system&gt;] [-ws &lt;windowing system&gt;] [-arch 
-  &lt;architecture&gt;] [-nqueryean] [&lt;testTarget&gt;][-properties &lt;path&gt;][-vm 
+  &lt;architecture&gt;] [-noclean] [&lt;testTarget&gt;][-properties &lt;path&gt;][-vm 
   &lt;path to java executable&gt;]</b></p>
 All parameters and targets are optional on windows systems. Just running &quot;runtests&quot; 
 will run <b>ALL</b> tests on Windows, installing a clean Eclipse and EMFT SDK between 
@@ -71,7 +71,7 @@ Test results are placed in the <i>testing</i>/<i>results</i> directory in xml an
       sparc. <b>Default x86</b></td>
   </tr>
   <tr> 
-    <td>-nqueryean</td>
+    <td>-noclean</td>
     <td>Run tests without installing an Eclipse and GEF SDK and tests between 
       test targets. Default is to re-install these between test targets.</td>
   </tr>

@@ -3,10 +3,10 @@
 # Runs the build.
 #
 # IMPORTANT: This script is supposed to be run from the "scripts" directory of a
-#            checked out version of "org.eclipse.emft.query.releng"
+#            checked out version of "org.eclipse.emft/releng/query"
 
 # sample usage:
-#  /home/www-data/build/emft/query/downloads/drops/1.0.0/N200511091716/org.eclipse.emft.query.releng/scripts/run.sh
+#  /home/www-data/build/emft/query/downloads/drops/1.0.0/N200511091716/org.eclipse.emft/releng/query/scripts/run.sh
 #    -branch HEAD
 #    -eclipseURL
 #    -emfURL
@@ -16,14 +16,14 @@
 #    -downloadsDir /home/www-data/build/emft/query/downloads
 #    -buildDir /home/www-data/build/emft/query/downloads/drops/1.0.0/N200511091716
 #    -buildTimestamp 200511091716
-#    -repoInfoFile /home/www-data/build/emft/query/downloads/drops/1.0.0/N200511091716/org.eclipse.emft.query.releng/repoInfo.properties
+#    -repoInfoFile /home/www-data/build/emft/query/downloads/drops/1.0.0/N200511091716/org.eclipse.emft/releng/query/repoInfo.properties
 #    -tagBuild false
 
 if [ $# -lt 16 ]; then
 	echo "usage: run.sh"
 	echo "-branch           <CVS branch of the files to be built>"
 	echo "-projBranch       <CVS branch of the files to be built (eg., build_200409171617 instead of HEAD)>"
-	echo "-projRelengBranch <CVS branch of org.eclipse.emft.query.releng>"
+	echo "-projRelengBranch <CVS branch of org.eclipse.emft/releng/query>"
 	echo "-URL              <The URLs of the Eclipse driver, EMF driver, and any other zips that need to be unpacked into"
 	echo "                   the eclipse install to resolve all dependencies. Enter one -URL [...] per required URL."
 	echo "                   If not using explicit -eclipseURL and -emfURL flags, script will attempt to guess values.>"
@@ -170,7 +170,7 @@ fi
 eclipseFile=`echo $eclipseURL | sed -e 's/^.*\///'`
 emfFile=`echo $emfURL | sed -e 's/^.*\///'`
 
-# org.eclipse.emft.query.releng directory
+# org.eclipse.emft/releng/query directory
 relengBuilderDir=`pwd | sed -e 's/\(.*\)\/.*/\1/'`
 
 # org.eclipse.releng.basebuilder directory

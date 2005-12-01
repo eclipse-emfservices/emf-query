@@ -28,7 +28,7 @@
 	<!-- Replace values for cvsRoot, package and mapVersionTag as desired. -->
 	<!-- ===================================================================== -->
 	<target name="checkLocal">
-		<available property="mapsLocal" file="${buildDirectory}/maps/org.eclipse.emft.query" />
+		<available property="mapsLocal" file="${buildDirectory}/maps" />
 	</target>
 
 	<target name="getMapFiles" depends="checkLocal" unless="mapsLocal">
@@ -38,21 +38,22 @@
 
 		<property name="mapVersionTag" value="HEAD" />
 
-		<cvs cvsRsh="ssh" cvsRoot="${mapCvsRoot}" tag="${mapVersionTag}" package="org.eclipse.emft.query.releng/maps" dest="${buildDirectory}/maps/org.eclipse.emft.query" />
-		<copy todir="${buildDirectory}/maps/org.eclipse.emft.query/CVS" overwrite="true">
-			<fileset dir="${buildDirectory}/maps/org.eclipse.emft.query/org.eclipse.emft.query.releng/maps/CVS" />
+		<cvs cvsRsh="ssh" cvsRoot="${mapCvsRoot}" tag="${mapVersionTag}" 
+			package="org.eclipse.emft/releng/query/maps" dest="${buildDirectory}/maps" />
+		<copy todir="${buildDirectory}/maps/CVS" overwrite="true">
+			<fileset dir="${buildDirectory}/maps/org.eclipse.emft/releng/query/maps/CVS" />
 		</copy>
-		<copy todir="${buildDirectory}/maps/org.eclipse.emft.query" overwrite="true">
-			<fileset dir="${buildDirectory}/maps/org.eclipse.emft.query/org.eclipse.emft.query.releng/maps" />
+		<copy todir="${buildDirectory}/maps" overwrite="true">
+			<fileset dir="${buildDirectory}/maps/org.eclipse.emft/releng/query/maps" />
 		</copy>
-		<delete dir="${buildDirectory}/maps/org.eclipse.emft.query/org.eclipse.emft.query.releng" />
+		<delete dir="${buildDirectory}/maps/org.eclipse.emft/releng/query" />
 
 		<!--tag the map files project-->
 		<antcall target="tagMapFiles" />
 	</target>
 
 	<target name="tagMapFiles" if="tagMaps">
-		<cvs cvsRsh="ssh" dest="${buildDirectory}/maps/org.eclipse.emft.query" command="tag v${timestamp}" />
+		<cvs cvsRsh="ssh" dest="${buildDirectory}/maps" command="tag v${timestamp}" />
 	</target>
 
 	<!-- ===================================================================== -->
@@ -90,7 +91,7 @@
 	<!-- Steps to do before generating build scripts -->
 	<!-- ===================================================================== -->
 	<target name="preGenerate">
-		<property name="projBuilderDir" location="${buildDirectory}/../org.eclipse.emft.query.releng" />
+		<property name="projBuilderDir" location="${buildDirectory}/../org.eclipse.emft/releng/query" />
 		<echo message="projBuilderDir: ${projBuilderDir}" />
 
 		<java classname="org.eclipse.emft.common.build.ChangeBundleClasspath" classpath="${projBuilderDir}/org.eclipse.emft.common.build/emft.common.build.jar">
@@ -157,7 +158,7 @@
 			</fileset>
 		</unzip>
 	</target>
-	<target name="clean" unless="nqueryean">
+	<target name="clean" unless="noclean">
 		<antcall target="allElements">
 			<param name="target" value="cleanElement" />
 		</antcall>
@@ -165,7 +166,7 @@
 
 	<target name="getBaseInit">
 		<taskdef name="stripVersions" classname="org.eclipse.releng.VersionNumberStripper" />
-		<property file="${buildDirectory}/maps/org.eclipse.emft.query/build.cfg" />
+		<property file="${buildDirectory}/maps/build.cfg" />
 	</target>
 
 	<target name="getEclipse" unless="eclipseExists" depends="getBaseInit">

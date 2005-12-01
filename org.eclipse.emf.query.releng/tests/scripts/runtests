@@ -24,7 +24,7 @@ installmode="clean"
 properties=
 
 # message printed to console
-usage="usage: $0 -os <osType> -ws <windowingSystemType> -arch <architecture> [-nqueryean] [<test target>][-properties <path>]"
+usage="usage: $0 -os <osType> -ws <windowingSystemType> -arch <architecture> [-noclean] [<test target>][-properties <path>]"
 
 # proces command line arguments
 while [ $# -gt 0 ]
@@ -35,7 +35,7 @@ do
 		-os) os="$2"; shift;;
 		-ws) ws="$2"; shift;;
 		-arch) arch="$2"; shift;;
-		-nqueryean) installmode="nqueryean";;
+		-noclean) installmode="noclean";;
 		-properties) properties="-propertyfile $2";shift;;
 		-vm) vm="$2";shift;;
 		-cp) cp="$2";shift;;
@@ -128,7 +128,7 @@ then
 		unzip -qq -o -C $z */plugins/org.eclipse.test*
 	done
 
-	if [ "$installmode" = "nqueryean" ]
+	if [ "$installmode" = "noclean" ]
 	then		
 		# if tests are to run without reinstalling eclipse, only install the test eclipse if it does not exist
 		# if the test-eclipse directory is in a partially installed state, it should be deleted manually

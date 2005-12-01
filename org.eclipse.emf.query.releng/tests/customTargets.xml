@@ -28,7 +28,7 @@
 <!-- Replace values for cvsRoot, package and mapVersionTag as desired. -->
 <!-- ===================================================================== -->
 <target name="checkLocal">
-	<available property="mapsLocal" file="${buildDirectory}/maps/org.eclipse.emft.query" />
+	<available property="mapsLocal" file="${buildDirectory}/maps" />
 </target>
 
 <target name="getMapFiles" depends="checkLocal" unless="mapsLocal">
@@ -41,23 +41,23 @@
 		cvsRsh="ssh"
 		cvsRoot="${mapCvsRoot}"
 		tag="${mapVersionTag}"
-		package="org.eclipse.emft.query.releng/maps"
-		dest="${buildDirectory}/maps/org.eclipse.emft.query"
+		package="org.eclipse.emft/releng/query/maps"
+		dest="${buildDirectory}/maps"
 	/>
-    <copy todir="${buildDirectory}/maps/org.eclipse.emft.query/CVS" overwrite="true">
-		<fileset dir="${buildDirectory}/maps/org.eclipse.emft.query/org.eclipse.emft.query.releng/maps/CVS"/>
+    <copy todir="${buildDirectory}/maps/CVS" overwrite="true">
+		<fileset dir="${buildDirectory}/maps/org.eclipse.emft/releng/query/maps/CVS"/>
 	</copy>
-	<copy todir="${buildDirectory}/maps/org.eclipse.emft.query" overwrite="true">
-		<fileset dir="${buildDirectory}/maps/org.eclipse.emft.query/org.eclipse.emft.query.releng/maps"/>
+	<copy todir="${buildDirectory}/maps" overwrite="true">
+		<fileset dir="${buildDirectory}/maps/org.eclipse.emft/releng/query/maps"/>
 	</copy>
-	<delete dir="${buildDirectory}/maps/org.eclipse.emft.query/org.eclipse.emft.query.releng"/>
+	<delete dir="${buildDirectory}/maps/org.eclipse.emft/releng/query"/>
 
 	<!--tag the map files project-->
 	<antcall target="tagMapFiles" />
 </target>
 
 <target name="tagMapFiles" if="tagMaps">
-	<cvs dest="${buildDirectory}/maps/org.eclipse.emft.query" command="tag v${timestamp}" />
+	<cvs dest="${buildDirectory}/maps" command="tag v${timestamp}" />
 </target>
 
 <!-- ===================================================================== -->
@@ -157,7 +157,7 @@
 	</unzip>
 </target>
 
-<target name="clean" unless="nqueryean">
+<target name="clean" unless="noclean">
 	<antcall target="allElements">
 		<param name="target" value="cleanElement" />
 	</antcall>
@@ -220,7 +220,7 @@
     </copy>
 
 	<!--copy in the file containing the URL of the Eclipse build used for testing-->
-    <copy todir="${workingDirectory}/testing" file="${buildDirectory}/maps/org.eclipse.emft.query/build.cfg" />
+    <copy todir="${workingDirectory}/testing" file="${buildDirectory}/maps/build.cfg" />
 
 	<!--set execute permission on *nix shell script-->
 	<chmod file="${workingDirectory}/testing/runtests" perm="755"/>
