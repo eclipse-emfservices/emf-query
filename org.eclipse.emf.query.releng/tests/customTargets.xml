@@ -220,7 +220,7 @@
     </copy>
 
 	<!--copy in the file containing the URL of the Eclipse build used for testing-->
-    <copy todir="${workingDirectory}/testing" file="${buildDirectory}/maps/build.cfg" />
+    <copy todir="${workingDirectory}/testing" file="${buildDirectory}/maps/org.eclipse.emft.${subprojectName}/build.cfg" />
 
 	<!--set execute permission on *nix shell script-->
 	<chmod file="${workingDirectory}/testing/runtests" perm="755"/>
