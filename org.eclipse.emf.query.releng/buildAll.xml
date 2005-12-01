@@ -223,7 +223,7 @@
 		</ant>
 
 		<!--  Get the build map over for the results to point to. -->
-		<copy file="${buildDirectory}/maps/${subprojectName}.map" tofile="${result}/directory.txt" />
+		<copy file="${buildDirectory}/maps/org.eclipse.emft.${subprojectName}/${subprojectName}.map" tofile="${result}/directory.txt" />
 
 		<!--  Insert url for supported eclipse drop-->
 		<replace file="${result}/${indexFileName}">
