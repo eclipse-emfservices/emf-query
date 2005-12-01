@@ -31,10 +31,14 @@
 		<available file="${transientPropertiesFile}" type="file" property="transientPropertiesIsAvailable" />
 		<fail message="Can't load transient properties from ${transientPropertiesFile}" unless="transientPropertiesIsAvailable"/>
 		<property file="${transientPropertiesFile}" />
+		
+		<property name="buildConfigFile" value="${basedir}/maps/build.cfg"/>
+		<available file="${buildConfigFile}" type="file" property="buildConfigIsAvailable" />
+		<fail message="Can't load build properties from ${buildConfigFile}" unless="buildConfigIsAvailable"/>
+		<property file="${buildConfigFile}" />
+
 		<echo message="buildVer = ${buildVer}"/>
 		<echo message="subprojectName = ${subprojectName}"/>
-		
-		<property file="${buildDirectory}/maps/build.cfg" />
 
 		<!-- <echo message="Base OS: ${baseos}; Base Window System: ${basews}"/> -->
 		<condition property="isWindows">

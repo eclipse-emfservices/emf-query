@@ -27,12 +27,7 @@ sub createConfigurationFile()
 	my $emfFile = $emfURL;
 	$emfFile =~ s/^.*\///;
 	
-	my $emfbuildId = $emfURL;
-	$emfbuildId =~ s/\/${emfFile}$//;
-	$emfbuildId =~ s/^.*\///;	
-	my $emfBuildURL = "$BUILDCFG::EMF_BUILD_ROOT_URL/$emfbuildId";
-#	$emfURL = "$emfBuildURL/$emfFile";
-
+	my $emfBuildURL =~ s/\/${emfFile}$//;
 
 	my $eclipseFile = $eclipseURL;
 	$eclipseFile =~ s/^.*\///;
