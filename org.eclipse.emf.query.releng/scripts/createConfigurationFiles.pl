@@ -4,7 +4,7 @@ use strict;
 package BUILDCFG;
 
 $BUILDCFG::ECLIPSE_BUILD_ROOT_URL="http://download.eclipse.org/downloads/drops";
-$BUILDCFG::EMF_BUILD_ROOT_URL="http://download.eclipse.org/tools/emf/downloads/drops/2.0";
+$BUILDCFG::EMF_BUILD_ROOT_URL="http://download.eclipse.org/tools/emf/downloads/drops";
 
 # Creates the configuration file based on a template.  The tokens @eclipseURL@, 
 # @eclipseFile@, @eclipseBuildURL@, @eclipseOS@ and @eclipseWS@ in the template 
