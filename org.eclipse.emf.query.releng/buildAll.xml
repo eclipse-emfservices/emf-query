@@ -214,7 +214,7 @@
 		<property name="result" value="${buildDirectory}/${buildLabel}" />
 
 		<ant antfile="${publish.xml}" dir="${basedir}">
-			<property name="dropTokenList" value="%${subprojectName}runtime%,%${subprojectName}sdk%,%${subprojectName}tests%,%${subprojectName}examples%" />
+			<property name="dropTokenList" value="%emftruntime%,%emftsdk%,%emfttests%,%emftexamples%" />
 			<property name="isBuildTested" value="true" />
 		</ant>
 
