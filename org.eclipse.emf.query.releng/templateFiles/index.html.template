@@ -73,7 +73,7 @@ for instructions on how to verify the integrity of your downloads.</p></td></tr>
 		</td>
 		<td width="34%"><b>Platform</b></td>
 		<td width="59%"><b>Download</b></td>
-%emftsdk%
+%querysdk%
 	</tr>
  </table>
 <table border="0" cellspacing="5" cellpadding="2" width="100%">
@@ -104,7 +104,7 @@ for instructions on how to verify the integrity of your downloads.</p></td></tr>
 		</td>
 		<td width="34%"><b>Platform</b></td>
 		<td width="59%"><b>Download</b></td>
-%emftruntime%
+%queryruntime%
 	</tr>
  </table>
 <table border="0" cellspacing="5" cellpadding="2" width="100%">
@@ -134,7 +134,7 @@ for instructions on how to verify the integrity of your downloads.</p></td></tr>
 		</td>
 		<td width="34%"><b>Platform</b></td>
 		<td width="59%"><b>Download</b></td>
-%emfttests%
+%querytests%
 	</tr>
  </table>
 <table border="0" cellspacing="5" cellpadding="2" width="100%">
@@ -164,7 +164,7 @@ for instructions on how to verify the integrity of your downloads.</p></td></tr>
 		</td>
 		<td width="34%"><b>Platform</b></td>
 		<td width="59%"><b>Download</b></td>
-%emftexamples%
+%queryexamples%
 	</tr>
  </table>
 <table border="0" cellspacing="5" cellpadding="2" width="100%">
