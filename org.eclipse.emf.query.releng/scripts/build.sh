@@ -139,7 +139,7 @@ fi
 echo Invoking Eclipse build
 
 command="$vm -cp $relengBaseBuilderDir/startup.jar org.eclipse.core.launcher.Main"
-command=$command" -application org.eclipse.ant.core.antRunner"
+command=$command" -application org.eclipse.ant.core.antRunner -consolelog"
 command=$command" -f $antScript $target"
 #command=$command" $bootclasspath" # removed: this is now specified in the ant task
 command=$command" -DmapVersionTag=$mapVersionTag"
