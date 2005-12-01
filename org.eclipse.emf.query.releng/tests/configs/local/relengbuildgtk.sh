@@ -127,7 +127,7 @@ fi
 
 # execute command to run tests
 chmod 755 runtests
-execCmd "runtests -os linux -ws gtk -arch x86 -cp eclipse/startup.jar -consolelog -Dplatform=linux.gtk $Dflags -vm $vmExecutable $antTestTarget $Xflags" $consolelog
+execCmd "runtests -os linux -ws gtk -arch x86 -cp eclipse/startup.jar -Dplatform=linux.gtk $Dflags -vm $vmExecutable $antTestTarget $Xflags" $consolelog
 
 # supress errors by checking for the file first
 if [ -r /tmp/.X43-lock ] ; then
