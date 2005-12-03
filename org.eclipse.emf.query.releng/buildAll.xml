@@ -26,13 +26,13 @@
 		<echo message="buildAll.xml properties:"/>
 		<echo message="basedir = ${basedir}"/>
 
-		<!-- moved up because we need to load a value for ${subprojectName} = query, query, validation, etc. -->
+		<!-- load a value for ${subprojectName} -->
 		<property name="transientPropertiesFile" value="${basedir}/../eclipse/transientProperties.txt" />
 		<available file="${transientPropertiesFile}" type="file" property="transientPropertiesIsAvailable" />
 		<fail message="Can't load transient properties from ${transientPropertiesFile}" unless="transientPropertiesIsAvailable"/>
 		<property file="${transientPropertiesFile}" />
-		
-		<property name="buildConfigFile" value="${basedir}/maps/build.cfg"/>
+
+		<property name="buildConfigFile" value="${basedir}/maps/org.eclipse.emft.${subprojectName}/build.cfg"/>
 		<available file="${buildConfigFile}" type="file" property="buildConfigIsAvailable" />
 		<fail message="Can't load build properties from ${buildConfigFile}" unless="buildConfigIsAvailable"/>
 		<property file="${buildConfigFile}" />
@@ -221,9 +221,6 @@
 			<property name="dropTokenList" value="%${subprojectName}runtime%,%${subprojectName}sdk%,%${subprojectName}tests%,%${subprojectName}examples%" />
 			<property name="isBuildTested" value="true" />
 		</ant>
-
-		<!--  Get the build map over for the results to point to. -->
-		<copy file="${buildDirectory}/maps/org.eclipse.emft.${subprojectName}/${subprojectName}.map" tofile="${result}/directory.txt" />
 
 		<!--  Insert url for supported eclipse drop-->
 		<replace file="${result}/${indexFileName}">

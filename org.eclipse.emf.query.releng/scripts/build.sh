@@ -8,7 +8,7 @@ usage() {
 	echo "	[-antScript <the ant script to be executed>]"
 	echo "	[-target <build target to execute>]"
 	echo "	[-buildID <buildID, e.g. 200406171012>]"
-	echo "  [-baseDir <directory where org.eclipse.emft/releng/query was check out into>]"
+	echo "  [-baseDir <directory where org.eclipse.emft/releng/{subproj} is checked out>]"
 	echo "  [--relengBaseBuilderDir <directory where org.eclipse.releng.basebuilder is located>]"
 	echo "	[-buildTimestamp <timestamp of the build>]"
 	echo "  [-downloadsDir <the directory where the eclipse drivers and other downloads (zip files) are located>]"

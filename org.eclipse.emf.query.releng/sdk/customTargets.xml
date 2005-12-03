@@ -6,7 +6,7 @@
 	<target name="allElements">
 		<ant antfile="${genericTargets}" target="${target}">
 			<property name="type" value="feature" />
-			<property name="id" value="org.eclipse.emf.query.sdk" />
+			<property name="id" value="org.eclipse.emf.${subprojectName}.sdk" />
 		</ant>
 	</target>
 
@@ -18,7 +18,7 @@
 	<!-- ===================================================================== -->
 
 	<target name="assemble.org.eclipse.emf.query.sdk">
-		<property name="archiveName" value="emft-query-SDK-${buildAlias}.zip" />
+		<property name="archiveName" value="emft-${subprojectName}-SDK-${buildAlias}.zip" />
 		<ant antfile="${assembleScriptName}" />
 		<!-- ADD POST STEPS -->
 	</target>
@@ -39,14 +39,14 @@
 		<property name="mapVersionTag" value="HEAD" />
 
 		<cvs cvsRsh="ssh" cvsRoot="${mapCvsRoot}" tag="${mapVersionTag}" 
-			package="org.eclipse.emft/releng/query/maps" dest="${buildDirectory}/maps" />
+			package="org.eclipse.emft/releng/${subprojectName}/maps" dest="${buildDirectory}/maps" />
 		<copy todir="${buildDirectory}/maps/CVS" overwrite="true">
-			<fileset dir="${buildDirectory}/maps/org.eclipse.emft/releng/query/maps/CVS" />
+			<fileset dir="${buildDirectory}/maps/org.eclipse.emft/releng/${subprojectName}/maps/CVS" />
 		</copy>
 		<copy todir="${buildDirectory}/maps" overwrite="true">
-			<fileset dir="${buildDirectory}/maps/org.eclipse.emft/releng/query/maps" />
+			<fileset dir="${buildDirectory}/maps/org.eclipse.emft/releng/${subprojectName}/maps" />
 		</copy>
-		<delete dir="${buildDirectory}/maps/org.eclipse.emft/releng/query" />
+		<delete dir="${buildDirectory}/maps/org.eclipse.emft/releng/${subprojectName}" />
 
 		<!--tag the map files project-->
 		<antcall target="tagMapFiles" />
@@ -91,7 +91,7 @@
 	<!-- Steps to do before generating build scripts -->
 	<!-- ===================================================================== -->
 	<target name="preGenerate">
-		<property name="projBuilderDir" location="${buildDirectory}/../org.eclipse.emft/releng/query" />
+		<property name="projBuilderDir" location="${buildDirectory}/../org.eclipse.emft/releng/${subprojectName}" />
 		<echo message="projBuilderDir: ${projBuilderDir}" />
 
 		<java classname="org.eclipse.emft.common.build.ChangeBundleClasspath" classpath="${projBuilderDir}/org.eclipse.emft.common.build/emft.common.build.jar">
@@ -153,7 +153,7 @@
 		</antcall>
 
 		<unzip dest="${buildDirectory}/${buildLabel}/compilelogs" overwrite="true">
-			<fileset dir="${buildDirectory}/features/org.eclipse.emf.query.sdk">
+			<fileset dir="${buildDirectory}/features/org.eclipse.emf.${subprojectName}.sdk">
 				<include name="*.log.zip" />
 			</fileset>
 		</unzip>
@@ -166,7 +166,7 @@
 
 	<target name="getBaseInit">
 		<taskdef name="stripVersions" classname="org.eclipse.releng.VersionNumberStripper" />
-		<property file="${buildDirectory}/maps/build.cfg" />
+		<property file="${buildDirectory}/maps/org.eclipse.emft.${subprojectName}/build.cfg" />
 	</target>
 
 	<target name="getEclipse" unless="eclipseExists" depends="getBaseInit">

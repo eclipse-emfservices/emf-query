@@ -67,11 +67,12 @@ sub getLastSegment()
 # return: Reference to an array with the directories.
 sub getEclipseElementDirectories()
 {
+	my $proj = shift;
 	my $command = "ssh $M_TM::SSH_HOST \'cd $M_TM::CVS_REP1";
-	$command .= " && ls -d org.eclipse.emft/query/plugins/*";
-	$command .= " && ls -d org.eclipse.emft/query/examples/*";
-	$command .= " && ls -d org.eclipse.emft/query/tests/*";
-	$command .= " && ls -d org.eclipse.emft/query/doc/*";
+	$command .= " && ls -d org.eclipse.emft/$proj/plugins/*";
+	$command .= " && ls -d org.eclipse.emft/$proj/examples/*";
+	$command .= " && ls -d org.eclipse.emft/$proj/tests/*";
+	$command .= " && ls -d org.eclipse.emft/$proj/doc/*";
 	$command .= "\'";
 
 	my @directories = split("\n", `$command`);
@@ -228,9 +229,9 @@ sub createTestManifestFile()
 
 sub main()
 {
-	if(@ARGV."" != 6)
+	if(@ARGV."" != 7)
 	{
-		die("Usage: perl createMapFile.pl <buildConfigFile> <map file> <map file template> <test manifest file> <test manifest file template> <CVS target of the files that will be extracted>\n");
+		die("Usage: perl createMapFile.pl <subprojectName> <buildConfigFile> <map file> <map file template> <test manifest file> <test manifest file template> <CVS target of the files that will be extracted>\n");
 	}
 
 	my $buildConfigFile          = $ARGV[0];
@@ -239,13 +240,14 @@ sub main()
 	my $testManifestFile         = $ARGV[3];
 	my $testManifestFileTemplate = $ARGV[4];
 	my $cvsTag                   = $ARGV[5];
+	my $subprojectName           = $ARGV[6];
 
 	die("Invalid build configuration file.\n") unless (-f $buildConfigFile);
 	die("Invalid map template file.\n") unless (-f $mapFileTemplate);
 	die("Invalid test manifest template file.\n") unless (-f $testManifestFileTemplate);
 	
 	&loadProperties($buildConfigFile);
-	my $directories = &getEclipseElementDirectories();
+	my $directories = &getEclipseElementDirectories($subprojectName);
 
 	my $mapEntries = &createMapEntries($directories, $cvsTag);
 	&createMapFile($mapFile, $mapFileTemplate, $cvsTag, $mapEntries);

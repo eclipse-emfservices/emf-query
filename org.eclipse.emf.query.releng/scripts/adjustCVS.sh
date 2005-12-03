@@ -5,12 +5,12 @@
 #	2. Creating the map file
 #	3. Checking and tagging the mapping file
 
-proj="query"
-
+proj=""; # REQUIRED
 if [ $# -lt 10 ]; then
 	echo "usage: adjustCVS.sh"
 	echo "-baseDir          <directory where org.eclipse.emft.*.releng was checked out>"
 	echo "-branch           <CVS branch of the files to be built>"
+	echo "-proj             <REQUIRED: shortname of the project to be build, eg. ocl, validation, query>"
 	echo "-projBranch       <CVS branch of the files to be built (eg., build_200409171617 instead of HEAD)>"
 	echo "-projRelengBranch <CVS branch of org.eclipse.emft.*.releng>"
 	echo "-buildTag         <the tag for the files of this build>"
@@ -30,6 +30,10 @@ while [ "$#" -gt 0 ]; do
 	case $1 in
 		'-branch')
 			branch=$2;
+			shift 1
+			;;
+		'-proj')
+			proj=$2;
 			shift 1
 			;;
 		'-projBranch')
@@ -101,8 +105,11 @@ fi
 
 # RTagging source files
 if [ $tagBuild != 'false' ]; then
-	command="cvs -q rtag $projBranchCmd $buildTag"
-	command=$command" org.eclipse.emft/$proj"
+	command="cvs -d :$cvsWriteProtocol:$cvsWriteUser@$cvsHost:$cvsRep -q rtag $projBranchCmd $buildTag"
+	command=$command" org.eclipse.emft/$proj/plugins"
+	command=$command" org.eclipse.emft/$proj/tests"
+	command=$command" org.eclipse.emft/$proj/examples"
+	command=$command" org.eclipse.emft/$proj/doc"
 	$baseDir/scripts/executeCommand.sh "$command"
 fi
 
@@ -114,10 +121,11 @@ command=$command" $baseDir/templateFiles/$proj.map.template"
 command=$command" $baseDir/testManifest.xml"
 command=$command" $baseDir/templateFiles/testManifest.xml.template"
 command=$command" $buildTag"
+command=$command" $proj"
 $baseDir/scripts/executeCommand.sh "$command"
 
 # Creating the build.cfg file
-buildcfg=$baseDir/maps/build.cfg
+buildcfg=$baseDir/maps/org.eclipse.emft.$proj; mkdir -p $buildcfg; buildcfg=$buildcfg"/build.cfg";
 cp $baseDir/../eclipse/transientProperties.txt $buildcfg
 echo "#Platform details" > $buildcfg
 echo "baseos=linux" >> $buildcfg
@@ -141,6 +149,9 @@ echo "oclBuildURL="${oclURL%/*} >> $buildcfg
 
 # store an extra copy
 cp $buildcfg $baseDir/../
+
+# copy mapfile to root too & rename
+cp $baseDir/maps/org.eclipse.emft.$proj/$proj.map $baseDir/../directory.txt;
 
 # Checking in and tagging the files
 if [ $tagBuild != 'false' ]; then

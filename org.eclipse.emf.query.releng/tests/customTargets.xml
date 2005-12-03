@@ -6,7 +6,7 @@
 <target name="allElements">
 	<ant antfile="${genericTargets}" target="${target}" >
 		<property name="type" value="feature" />
-		<property name="id" value="org.eclipse.emf.query.tests" />
+		<property name="id" value="org.eclipse.emf.${subprojectName}.tests" />
 	</ant>
 </target>
 
@@ -37,27 +37,22 @@
 	<property name="mapCvsRoot" value=":${cvsReadProtocol}:${cvsReadUser}@${cvsHost}:${cvsRep}" />
 	<property name="mapVersionTag" value="HEAD" />
     
-    <cvs
-		cvsRsh="ssh"
-		cvsRoot="${mapCvsRoot}"
-		tag="${mapVersionTag}"
-		package="org.eclipse.emft/releng/query/maps"
-		dest="${buildDirectory}/maps"
-	/>
+		<cvs cvsRsh="ssh" cvsRoot="${mapCvsRoot}" tag="${mapVersionTag}" 
+			package="org.eclipse.emft/releng/${subprojectName}/maps" dest="${buildDirectory}/maps" />
     <copy todir="${buildDirectory}/maps/CVS" overwrite="true">
-		<fileset dir="${buildDirectory}/maps/org.eclipse.emft/releng/query/maps/CVS"/>
+			<fileset dir="${buildDirectory}/maps/org.eclipse.emft/releng/${subprojectName}/maps/CVS" />
 	</copy>
 	<copy todir="${buildDirectory}/maps" overwrite="true">
-		<fileset dir="${buildDirectory}/maps/org.eclipse.emft/releng/query/maps"/>
+			<fileset dir="${buildDirectory}/maps/org.eclipse.emft/releng/${subprojectName}/maps" />
 	</copy>
-	<delete dir="${buildDirectory}/maps/org.eclipse.emft/releng/query"/>
+		<delete dir="${buildDirectory}/maps/org.eclipse.emft/releng/${subprojectName}" />
 
 	<!--tag the map files project-->
 	<antcall target="tagMapFiles" />
 </target>
 
 <target name="tagMapFiles" if="tagMaps">
-	<cvs dest="${buildDirectory}/maps" command="tag v${timestamp}" />
+	<cvs dest="${buildDirectory}/maps/org.eclipse.emft.${subprojectName}" command="tag v${timestamp}" />
 </target>
 
 <!-- ===================================================================== -->
@@ -151,7 +146,7 @@
 	</antcall>
 
 	<unzip dest="${buildDirectory}/${buildLabel}/compilelogs" overwrite="true">
-		<fileset dir="${buildDirectory}/features/org.eclipse.emf.query.tests">
+		<fileset dir="${buildDirectory}/features/org.eclipse.emf.${subprojectName}.tests">
 			<include name="*.log.zip" />
 		</fileset>
 	</unzip>
@@ -188,7 +183,7 @@
 	<!-- new 2005-08-16 -->
     <generateTestProperties 
             buildDirectory="${buildDirectory}" 
-            featureId="org.eclipse.emf.query.tests" 
+            featureId="org.eclipse.emf.${subprojectName}.tests" 
             outputFile="${workingDirectory}/testing/test.properties" 
     /> 
 
@@ -220,7 +215,7 @@
     </copy>
 
 	<!--copy in the file containing the URL of the Eclipse build used for testing-->
-    <copy todir="${workingDirectory}/testing" file="${buildDirectory}/maps/org.eclipse.emft.${subprojectName}/build.cfg" />
+    <copy todir="${workingDirectory}/testing" file="${buildDirectory}/../build.cfg" />
 
 	<!--set execute permission on *nix shell script-->
 	<chmod file="${workingDirectory}/testing/runtests" perm="755"/>

@@ -6,7 +6,7 @@
 <target name="allElements">
 	<ant antfile="${genericTargets}" target="${target}" >
 		<property name="type" value="feature" />
-		<property name="id" value="org.eclipse.emf.query.doc" />
+		<property name="id" value="org.eclipse.emf.${subprojectName}.doc" />
 	</ant>
 </target>
 
@@ -18,7 +18,7 @@
 <!-- ===================================================================== -->
 
 <target name="assemble.org.eclipse.emf.query.doc">
-	<property name="archiveName" value="emft-query-SDK-${buildAlias}.zip"/>
+	<property name="archiveName" value="emft-${subprojectName}-SDK-${buildAlias}.zip"/>
 	<ant antfile="${assembleScriptName}"/>
 <!-- ADD POST STEPS -->
 </target>
@@ -36,22 +36,15 @@
 	<!-- ***  change the repo info -->
 	<property name="mapCvsRoot" value=":${cvsReadProtocol}:${cvsReadUser}@${cvsHost}:${cvsRep}" />
 
-	<property name="mapVersionTag" value="HEAD" />
-
-        <cvs
-		cvsRsh="ssh"
-		cvsRoot="${mapCvsRoot}"
-		tag="${mapVersionTag}"
-		package="org.eclipse.emft/releng/query/maps"
-		dest="${buildDirectory}/maps"
-	/>
-        <copy todir="${buildDirectory}/maps/CVS" overwrite="true">
-		<fileset dir="${buildDirectory}/maps/org.eclipse.emft/releng/query/maps/CVS"/>
-	</copy>
-	<copy todir="${buildDirectory}/maps" overwrite="true">
-		<fileset dir="${buildDirectory}/maps/org.eclipse.emft/releng/query/maps"/>
-	</copy>
-	<delete dir="${buildDirectory}/maps/org.eclipse.emft/releng/query"/>
+		<cvs cvsRsh="ssh" cvsRoot="${mapCvsRoot}" tag="${mapVersionTag}" 
+			package="org.eclipse.emft/releng/${subprojectName}/maps" dest="${buildDirectory}/maps" />
+		<copy todir="${buildDirectory}/maps/CVS" overwrite="true">
+			<fileset dir="${buildDirectory}/maps/org.eclipse.emft/releng/${subprojectName}/maps/CVS" />
+		</copy>
+		<copy todir="${buildDirectory}/maps" overwrite="true">
+			<fileset dir="${buildDirectory}/maps/org.eclipse.emft/releng/${subprojectName}/maps" />
+		</copy>
+		<delete dir="${buildDirectory}/maps/org.eclipse.emft/releng/${subprojectName}" />
 
 	<!--tag the map files project-->
 	<antcall target="tagMapFiles" />
@@ -149,7 +142,7 @@
 	</antcall>
 
 	<unzip dest="${buildDirectory}/${buildLabel}/compilelogs" overwrite="true">
-		<fileset dir="${buildDirectory}/features/org.eclipse.emf.query.doc">
+		<fileset dir="${buildDirectory}/features/org.eclipse.emf.${subprojectName}.doc">
 			<include name="*.log.zip" />
 		</fileset>
 	</unzip>
@@ -163,7 +156,7 @@
 
 <target name="getBaseInit">
 	<taskdef name="stripVersions" classname="org.eclipse.releng.VersionNumberStripper" />
-	<property file="${buildDirectory}/maps/build.cfg"/>
+		<property file="${buildDirectory}/maps/org.eclipse.emft.${subprojectName}/build.cfg" />
 </target>
 
 <target name="getEclipse" unless="eclipseExists" depends="getBaseInit">

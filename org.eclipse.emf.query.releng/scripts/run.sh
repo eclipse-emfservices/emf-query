@@ -1,35 +1,23 @@
 #!/bin/sh
+# $Id: run.sh,v 1.3 2005/12/03 10:16:19 nickb Exp $
 
 # Runs the build.
 #
 # IMPORTANT: This script is supposed to be run from the "scripts" directory of a
-#            checked out version of "org.eclipse.emft/releng/query"
-
-# sample usage:
-#  /home/www-data/build/emft/query/downloads/drops/1.0.0/N200511091716/org.eclipse.emft/releng/query/scripts/run.sh
-#    -branch HEAD
-#    -eclipseURL
-#    -emfURL
-#    -antTarget run
-#    -buildType N
-#    -javaHome
-#    -downloadsDir /home/www-data/build/emft/query/downloads
-#    -buildDir /home/www-data/build/emft/query/downloads/drops/1.0.0/N200511091716
-#    -buildTimestamp 200511091716
-#    -repoInfoFile /home/www-data/build/emft/query/downloads/drops/1.0.0/N200511091716/org.eclipse.emft/releng/query/repoInfo.properties
-#    -tagBuild false
-
+#            checked out version of "org.eclipse.emft.$project.releng"
 if [ $# -lt 16 ]; then
 	echo "usage: run.sh"
 	echo "-branch           <CVS branch of the files to be built>"
+	echo "-proj             <REQUIRED: shortname of the project to be build, eg. ocl, validation, query>"
 	echo "-projBranch       <CVS branch of the files to be built (eg., build_200409171617 instead of HEAD)>"
-	echo "-projRelengBranch <CVS branch of org.eclipse.emft/releng/query>"
+	echo "-projRelengBranch <CVS branch of org.eclipse.emft.$project.releng>"
 	echo "-URL              <The URLs of the Eclipse driver, EMF driver, and any other zips that need to be unpacked into"
 	echo "                   the eclipse install to resolve all dependencies. Enter one -URL [...] per required URL."
 	echo "                   If not using explicit -eclipseURL and -emfURL flags, script will attempt to guess values.>"
 	echo "-eclipseURL       <The URL of the Eclipse driver to be used during the build.  The name of the file "
 	echo "                   defines the OS and the WS>"
 	echo "-emfURL           <The URL of the EMF driver to be used during the build.>"
+	echo "-oclURL           <The URL of the OCL driver to be used during the build.>"
 	echo "-antTarget        <The Ant target of the build script - controls the packages that will be built"
 	echo "-buildType        <The type of the build>"
 	echo "-javaHome         <The JAVA_HOME directory>"
@@ -54,12 +42,18 @@ tagBuild='true'
 
 dependURL=""; # loaded from -URL
 
+proj=""; # REQUIRED
+
 echo "";
 echo "[`date +%Y%m%d\ %k\:%M\:%S`] run.sh executing with the following options:"
 # Create local variable based on the input
 while [ "$#" -gt 0 ]; do
 	echo "    $1 $2";
 	case $1 in
+		'-proj')
+			proj=$2;
+			shift 1
+			;;
 		'-branch')
 			branch=$2;
 			shift 1
@@ -85,6 +79,10 @@ while [ "$#" -gt 0 ]; do
 			;;
 		'-emfURL')
 			emfURL=$2;
+			shift 1
+			;;
+		'-oclURL')
+			oclURL=$2;
 			shift 1
 			;;
 		'-javaHome')
@@ -158,11 +156,19 @@ if [ "x$emfURL" = "x" ]; then
 	#echo "Using emfURL = $emfURL"
 fi
 
+if [ "x$oclURL" = "x" ]; then
+    guessedURL="";guessURL "emft-ocl-SDK" $dependURL;oclURL="$guessedURL";
+	#echo "Using oclURL = $oclURL"
+fi
+
 if [ "x$eclipseURL" = "x" ]; then
 	echo "Error: no -eclipseURL specified! Script will now exit."
 	exit 99;
 elif [ "x$emfURL" = "x" ]; then
 	echo "Error: no -emfURL specified! Script will now exit."
+	exit 99;
+elif [ "x$oclURL" = "x" ]; then
+	echo "Error: no -oclURL specified! Script will now exit."
 	exit 99;
 fi 
 
@@ -170,7 +176,7 @@ fi
 eclipseFile=`echo $eclipseURL | sed -e 's/^.*\///'`
 emfFile=`echo $emfURL | sed -e 's/^.*\///'`
 
-# org.eclipse.emft/releng/query directory
+# org.eclipse.emft.$proj.releng directory
 relengBuilderDir=`pwd | sed -e 's/\(.*\)\/.*/\1/'`
 
 # org.eclipse.releng.basebuilder directory
@@ -202,6 +208,7 @@ $relengBuilderDir/scripts/executeCommand.sh "mkdir -p $downloadsDir"
 command="$relengBuilderDir/scripts/adjustCVS.sh"
 command=$command" -repoInfoFile $repoInfoFile"
 command=$command" -baseDir $relengBuilderDir"
+command=$command" -proj $proj"
 command=$command" -branch $branch"
 
 if [ x$emfBranch != x ]; then
@@ -216,14 +223,15 @@ command=$command" -buildTag $buildTag"
 command=$command" -tagBuild $tagBuild"
 command=$command" -eclipseURL $eclipseURL"
 command=$command" -emfURL $emfURL"
+command=$command" -oclURL $oclURL"
 
 $relengBuilderDir/scripts/executeCommand.sh "$command"
 
 export JAVA_HOME=$javaHome
 
 if [ $tagBuild == 'false' ]; then
-	mkdir -p $buildDir/maps/org.eclipse.emft.query/
-	cp $relengBuilderDir/maps/* $buildDir/maps/org.eclipse.emft.query/
+	mkdir -p $buildDir/maps/org.eclipse.emft.$proj/
+	cp $relengBuilderDir/maps/* $buildDir/maps/org.eclipse.emft.$proj/
 fi
 
 if [ x$buildAlias != x ]; then
