@@ -117,49 +117,30 @@ command=$command" $buildTag"
 $baseDir/scripts/executeCommand.sh "$command"
 
 # Creating the build.cfg file
-command="perl $baseDir/scripts/createConfigurationFiles.pl"
-command=$command" $baseDir/maps/build.cfg"
-command=$command" $baseDir/templateFiles/build.cfg.template"
-command=$command" $eclipseURL"
-command=$command" $emfURL"
-$baseDir/scripts/executeCommand.sh "$command"
+buildcfg=$baseDir/maps/build.cfg
+cp $baseDir/../eclipse/transientProperties.txt $buildcfg
+echo "#Platform details" > $buildcfg
+echo "baseos=linux" >> $buildcfg
+echo "basews=gtk" >> $buildcfg
+echo "basearch=x86" >> $buildcfg
 
-# Creating the build.properties for each type of packaging
-command="perl $baseDir/scripts/createConfigurationFiles.pl"
-command=$command" $baseDir/sdk/build.properties"
-command=$command" $baseDir/templateFiles/build.properties.template"
-command=$command" $eclipseURL"
-command=$command" $emfURL"
-$baseDir/scripts/executeCommand.sh "$command"
+echo "#Eclipse details" >> $buildcfg
+echo "eclipseURL=$eclipseURL" >> $buildcfg
+echo "eclipseFile="${eclipseURL##*/} >> $buildcfg
+echo "eclipseBuildURL="${eclipseURL%/*} >> $buildcfg
 
-command="perl $baseDir/scripts/createConfigurationFiles.pl"
-command=$command" $baseDir/$proj/runtime/build.properties"
-command=$command" $baseDir/templateFiles/build.properties.template"
-command=$command" $eclipseURL"
-command=$command" $emfURL"
-$baseDir/scripts/executeCommand.sh "$command"
+echo "#EMF details" >> $buildcfg
+echo "emfURL=$emfURL" >> $buildcfg
+echo "emfFile="${emfURL##*/} >> $buildcfg
+echo "emfBuildURL="${emfURL%/*} >> $buildcfg
 
-command="perl $baseDir/scripts/createConfigurationFiles.pl"
-command=$command" $baseDir/examples/build.properties"
-command=$command" $baseDir/templateFiles/build.properties.template"
-command=$command" $eclipseURL"
-command=$command" $emfURL"
-$baseDir/scripts/executeCommand.sh "$command"
-	
-command="perl $baseDir/scripts/createConfigurationFiles.pl"
-command=$command" $baseDir/tests/build.properties"
-command=$command" $baseDir/templateFiles/build.properties.template"
-command=$command" $eclipseURL"
-command=$command" $emfURL"
-$baseDir/scripts/executeCommand.sh "$command"
+echo "#OCL details" >> $buildcfg
+echo "oclURL=$oclURL" >> $buildcfg
+echo "oclFile="${oclURL##*/} >> $buildcfg
+echo "oclBuildURL="${oclURL%/*} >> $buildcfg
 
-command="perl $baseDir/scripts/createConfigurationFiles.pl"
-command=$command" $baseDir/$proj/doc/build.properties"
-command=$command" $baseDir/templateFiles/build.properties.template"
-command=$command" $eclipseURL"
-command=$command" $emfURL"
-$baseDir/scripts/executeCommand.sh "$command"
-
+# store an extra copy
+cp $buildcfg $baseDir/../
 
 # Checking in and tagging the files
 if [ $tagBuild != 'false' ]; then
