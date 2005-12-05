@@ -141,6 +141,11 @@ echo "#EMF details" >> $buildcfg
 echo "emfURL=$emfURL" >> $buildcfg
 echo "emfFile="${emfURL##*/} >> $buildcfg
 echo "emfBuildURL="${emfURL%/*} >> $buildcfg
+echo "#EMF examples details" >> $buildcfg
+# assume EMF examples are from the same build as the SDK
+emfExamplesURL=${emfURL/-SDK-/-Examples-};
+echo "emfExamplesURL=$emfExamplesURL" >> $buildcfg
+echo "emfExamplesFile="${emfExamplesURL##*/} >> $buildcfg
 
 echo "#OCL details" >> $buildcfg
 echo "oclURL=$oclURL" >> $buildcfg
