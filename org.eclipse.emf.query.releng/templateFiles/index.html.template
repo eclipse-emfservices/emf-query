@@ -38,10 +38,11 @@ for instructions on how to verify the integrity of your downloads.</p></td></tr>
 	</tr>
 	<tr><td>
 		<br/>
-		EMFT requires Eclipse and EMF to run.  The Eclipse driver used in this build was
+		EMFT Query requires Eclipse, EMF and EMFT OCL to run.  The Eclipse driver used in this build was
 		<a href="@eclipseURL@">@eclipseFile@</a> - for details on this driver or to download it
 		for your platform, check out its <a href="@eclipseBuildURL@">build page</a>. The EMF build
-		was <a href="@emfURL@">@emfFile@</a> from this <a href="@emfBuildURL@">build page</a>.
+		was <a href="@emfURL@">@emfFile@</a> from this <a href="@emfBuildURL@">build page</a>. The OCL build
+		was <a href="@oclURL@">@oclFile@</a> from this <a href="@oclBuildURL@">build page</a>.
 	</td></tr>
 </table>
 

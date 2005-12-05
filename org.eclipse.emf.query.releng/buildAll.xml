@@ -231,6 +231,10 @@
 			<replacefilter token="@emfFile@" value="${emfFile}" />
 			<replacefilter token="@emfURL@" value="${emfURL}" />
 			<replacefilter token="@emfBuildURL@" value="${emfBuildURL}" />
+
+			<replacefilter token="@oclFile@" value="${oclFile}" />
+			<replacefilter token="@oclURL@" value="${oclURL}" />
+			<replacefilter token="@oclBuildURL@" value="${oclBuildURL}" />
 		</replace>
 		<antcall target="doExtraReplacements" />
 
