@@ -83,6 +83,16 @@
 		<replace dir="${buildDirectory}/plugins" value="${timestamp}" token="@buildid@">
 			<include name="**/about.mappings" />
 		</replace>
+		<echo message="Get EMF Examples zip ..."/>
+		<mkdir dir="${buildDirectory}/Examples"/>
+		<get src="${emfBuildURL}/*Examples*.zip" dest="${buildDirectory}/Examples"/>
+		<unzip src="${buildDirectory}/Examples/*Examples*.zip" dest="${buildDirectory}/Examples"/>
+		<move todir="${buildDirectory}">
+			<fileset>
+				<include name="**/features/**"/>
+				<include name="**/plugins/**"/>
+			</fileset>
+		</move>
 	</target>
 
 	<!-- ===================================================================== -->
