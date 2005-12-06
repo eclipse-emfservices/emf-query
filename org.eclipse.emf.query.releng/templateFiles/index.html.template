@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link rel="stylesheet" href="http://dev.eclipse.org/default_style.css" type="text/css">
+<link rel="stylesheet" href="http://www.eclipse.org/default_style.css" type="text/css">
 <title>EMFT - Download</title>
 </head>
 <body>
@@ -16,14 +16,13 @@
         @date@ </p>
       <p>These downloads are provided under the <a href="http://www.eclipse.org/legal/notice.html">Eclipse.org
         Software User Agreement</a>.</p>
-      <p>
 
-To view the Release Notes for this Build click <a href="http://eclipse.org/emft/news/release-notes.php?version=@buildVer@">here</a>.<br>
+<p>To view the Release Notes for this Build click <a href="http://www.eclipse.org/emft/news/release-notes.xml">here</a>.<br>
 To view the Test Results and Compile Logs for this build click <a href="testResults.php">here</a>.<BR>
 To view the Map File Entries for this Build click <a href="directory.txt">here</a>.<br>
+To view the Overall Build Log for this Build click <a href="buildlog.txt">here</a>.<br>
 
-<p> Click <a href="verifyMD5.html">here</a>
-for instructions on how to verify the integrity of your downloads.</p></td></tr>
+<p> Click <a href="verifyMD5.html">here</a> for instructions on how to verify the integrity of your downloads.</p></td></tr>
 
 </td>
   </tr>
@@ -120,7 +119,7 @@ for instructions on how to verify the integrity of your downloads.</p></td></tr>
 
 <table border="0" cellspacing="5" cellpadding="2" width="100%">
 	<tr>
-		<td align="LEFT" valign="TOP" colspan="3" bgcolor="#0080C0"><b><font face="Arial,Helvetica" color="#FFFFFF">Automated Tests</font></b></td>
+		<td align="LEFT" valign="TOP" colspan="3" bgcolor="#999999"><b><font face="Arial,Helvetica" color="#FFFFFF">Automated Tests</font></b></td>
 	</tr>
 	<tr>
 		<td align="LEFT" valign="TOP" colspan="3">

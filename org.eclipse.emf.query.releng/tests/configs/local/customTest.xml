@@ -1,5 +1,15 @@
 <project name="Customized testing instructions" default="noDefault">
+
+	<property name="transientPropertiesFile" value="${buildDirectory}/transientProperties.txt" />
+	<available file="${transientPropertiesFile}" type="file" property="transientPropertiesIsAvailable" />
+
+	<target name="loadTransientProperties" if="transientPropertiesIsAvailable">
+		<property file="${transientPropertiesFile}" />
+	</target>
+
 	<target name="customSetup">
+		<antcall target="loadTransientProperties"/>
+	
 		<antcall target="installVM"/>
 
 		<property name="shell" value="relengbuildgtk.sh"/>
