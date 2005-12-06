@@ -156,7 +156,7 @@ echo "oclBuildURL="${oclURL%/*} >> $buildcfg
 cp $buildcfg $baseDir/../
 
 # copy mapfile to root too & rename
-cp $baseDir/maps/org.eclipse.emft.$proj/$proj.map $baseDir/../directory.txt;
+cp $baseDir/maps/$proj.map $baseDir/../directory.txt;
 
 # Checking in and tagging the files
 if [ $tagBuild != 'false' ]; then
