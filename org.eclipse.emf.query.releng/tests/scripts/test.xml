@@ -28,49 +28,40 @@
 
 	<target name="setup" if="clean" description="Reinstall the test Eclipse installation if specified by user">
 		<antcall target="loadTransientProperties"/>
+		<echo message="install: ${install}"/>
 		<delete dir="${install}" />
 		<mkdir dir="${install}" />
-		
-		<echo message="install: ${install}"/>
-
-		<!--The eclipse SDK must exist before this script is executed-->
-		
-		<property name="downloadsDir" value="."/>
-		<property name="eclipseFile" value="eclipse-SDK-*"/>
-
-		<echo message="downloadsDir: ${downloadsDir}"/>
-		<echo message="eclipseFile: ${eclipseFile}"/>
-
+			
+		<echo message="Download, then unpack: UML2 SDK, EMFT OCL SDK, EMF Examples, EMF SDK + Eclipse SDK..."/>
+		<ant target="getTestDependency" antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
+			<property name="url" value="${uml2URL}"/>
+			<property name="file" value="${uml2File}"/>
+			<property name="unpackDest" value="${install}"/>
+		</ant>
+		<ant target="getTestDependency" antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
+			<property name="url" value="${oclURL}"/>
+			<property name="file" value="${oclFile}"/>
+			<property name="unpackDest" value="${install}"/>
+		</ant>
+		<ant target="getTestDependency" antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
+			<property name="url" value="${emfURL}"/>
+			<property name="file" value="${emfFile}"/>
+			<property name="unpackDest" value="${install}"/>
+		</ant>
+		<ant target="getTestDependency" antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
+			<property name="url" value="${emfBuildURL}/${emfExamplesFile}"/>
+			<property name="file" value="${emfExamplesFile}"/>
+			<property name="unpackDest" value="${install}"/>
+		</ant>
+		<ant target="getTestDependency" antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
+			<property name="url" value="${eclipseURL}"/>
+			<property name="file" value="${eclipseFile}"/>
+			<property name="unpackDest" value="${install}"/>
+		</ant>
+		<echo message="Unpack JUnit Tests ..."/>		
 		<unzip dest="${install}" overwrite="true">
-		    <fileset dir="${downloadsDir}">
-		         <include name="**/${eclipseFile}.zip"/>
-		    </fileset>
+		    <fileset dir="."><include name="**/emft-${subprojectName}-junit-tests-*.zip"/></fileset>
 		</unzip>
-
-		<untar compression="gzip" dest="${install}" overwrite="true">
-		    <fileset dir="${downloadsDir}">
-		        <include name="**/${eclipseFile}.tar.gz"/>
-		    </fileset>
-		</untar>
-
-		<unzip dest="${install}" overwrite="true">
-		    <fileset dir=".">
-		        <include name="**/emf*.zip"/>
-		    </fileset>
-		</unzip>
-
-		<unzip dest="${install}" overwrite="true">
-		    <fileset dir=".">
-		        <include name="**/emft-*.zip"/>
-		    </fileset>
-		</unzip>
-
-		<unzip dest="${install}" overwrite="true">
-		    <fileset dir=".">
-		        <include name="**/emft-${subprojectName}-junit-tests-*.zip"/>
-		    </fileset>
-		</unzip>
-
 	</target>
 
 	<target name="runtests" depends="setup" description="Runs ant on the test.xml for a specified plugin.  Requires a property value setting for testPlugin only if test.properties is not available.  The property testPlugin represents a directory name made up of the plugin id and plugin version.  This directory must contain a valid test.xml.">
