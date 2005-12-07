@@ -33,28 +33,28 @@
 		<mkdir dir="${install}" />
 			
 		<echo message="Download, then unpack: UML2 SDK, EMFT OCL SDK, EMF Examples, EMF SDK + Eclipse SDK..."/>
-		<property name="getDependencies.xml" value="${buildDirectory}/../../../../org.eclipse.emft.common.releng/scripts/getDependencies.xml"/>
-		<ant target="getTestDependency" antfile="${getDependencies.xml}">
+		<property name="getTestDependencies.xml" value="${buildDirectory}/../../../../org.eclipse.emft.common.releng/scripts/getTestDependencies.xml"/>
+		<ant target="getTestDependency" antfile="${getTestDependencies.xml}">
 			<property name="url" value="${uml2URL}"/>
 			<property name="file" value="${uml2File}"/>
 			<property name="unpackDest" value="${install}"/>
 		</ant>
-		<ant target="getTestDependency" antfile="${getDependencies.xml}">
+		<ant target="getTestDependency" antfile="${getTestDependencies.xml}">
 			<property name="url" value="${oclURL}"/>
 			<property name="file" value="${oclFile}"/>
 			<property name="unpackDest" value="${install}"/>
 		</ant>
-		<ant target="getTestDependency" antfile="${getDependencies.xml}">
+		<ant target="getTestDependency" antfile="${getTestDependencies.xml}">
 			<property name="url" value="${emfURL}"/>
 			<property name="file" value="${emfFile}"/>
 			<property name="unpackDest" value="${install}"/>
 		</ant>
-		<ant target="getTestDependency" antfile="${getDependencies.xml}">
+		<ant target="getTestDependency" antfile="${getTestDependencies.xml}">
 			<property name="url" value="${emfBuildURL}/${emfExamplesFile}"/>
 			<property name="file" value="${emfExamplesFile}"/>
 			<property name="unpackDest" value="${install}"/>
 		</ant>
-		<ant target="getTestDependency" antfile="${getDependencies.xml}">
+		<ant target="getTestDependency" antfile="${getTestDependencies.xml}">
 			<property name="url" value="${eclipseURL}"/>
 			<property name="file" value="${eclipseFile}"/>
 			<property name="unpackDest" value="${install}"/>
