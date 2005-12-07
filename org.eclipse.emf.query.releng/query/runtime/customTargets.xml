@@ -161,19 +161,6 @@
 	</antcall>
 </target>
 
-
-	<!-- if there's already an existing eclipse zip by the same name in the dest folder, don't download it again! -->
-
-	<!-- note: only gzip, zip and bzip2 are supported; compress (.tar.Z) is not -->
-
-
-
-	<!-- Extract doc.zip so we can create links in the java doc -->
-
-
-
-
-
 <!-- ===================================================================== -->
 <!-- Default target                                                        -->
 <!-- ===================================================================== -->
