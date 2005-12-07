@@ -63,23 +63,26 @@
 	</target>
 
 	<!-- ===================================================================== -->
-	<!-- Steps to do after setup but before starting the build proper -->
+	<!-- Steps to do after setup but before starting the build proper :: get dependent bundles -->
 	<!-- ===================================================================== -->
 	<target name="postSetup">
-		<ant target="getDependency" 
-			antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
+		<echo message="Download, then unpack: EMFT OCL SDK, EMF Examples, EMF SDK + Eclipse SDK..."/>
+		<ant target="getDependency" antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
 			<property name="url" value="${oclURL}"/>
 			<property name="file" value="${oclFile}"/>
 			<property name="isUnpackedFile" value="${buildDirectory}/plugins/org.eclipse.emf.ocl/plugin.xml"/>
 		</ant>
-		<ant target="getDependency" 
-			antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
+		<ant target="getDependency" antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
 			<property name="url" value="${emfURL}"/>
 			<property name="file" value="${emfFile}"/>
 			<property name="isUnpackedFile" value="${buildDirectory}/plugins/org.eclipse.emf.ecore/plugin.xml"/>
 		</ant>
-		<ant target="getDependency"
-			antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
+		<ant target="getDependency" antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
+			<property name="url" value="${emfBuildURL}/${emfExamplesFile}"/>
+			<property name="file" value="${emfExamplesFile}"/>
+			<property name="isUnpackedFile" value="${buildDirectory}/plugins/org.eclipse.emf.examples/plugin.xml"/>
+		</ant>
+		<ant target="getDependency" antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
 			<property name="url" value="${eclipseURL}"/>
 			<property name="file" value="${eclipseFile}"/>
 			<property name="isUnpackedFile" value="${buildDirectory}/plugins/org.eclipse.platform/plugin.xml" />
@@ -177,29 +180,7 @@
 			<param name="target" value="cleanElement" />
 		</antcall>
 	</target>
-
-
-		<!-- if there's already an existing eclipse zip by the same name in the dest folder, don't download it again! -->
-
-		<!-- note: only gzip, zip and bzip2 are supported; compress (.tar.Z) is not -->
-
-
-
-		<!-- Extract doc.zip so we can create links in the java doc -->
-
-
-
-
-
-		<!-- if there's already an existing EMF zip by the same name in the dest folder, don't download it again! -->
-
-		<!-- note: only gzip, zip and bzip2 are supported; compress (.tar.Z) is not -->
-
-
-
-
-
-
+	
 	<!-- ===================================================================== -->
 	<!-- Default target                                                        -->
 	<!-- ===================================================================== -->
