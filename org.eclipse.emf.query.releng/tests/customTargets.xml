@@ -65,33 +65,6 @@
 <!-- Steps to do after setup but before starting the build proper -->
 <!-- ===================================================================== -->
 <target name="postSetup">
-	<echo message="Download, then unpack: UML2 SDK..."/>
-	<ant target="getDependency" antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
-		<property name="url" value="${uml2URL}"/>
-		<property name="file" value="${uml2File}"/>
-		<property name="isUnpackedFile" value="${buildDirectory}/plugins/org.eclipse.uml2/plugin.xml" />
-	</ant>
-	<echo message="Download, then unpack: EMFT OCL SDK, EMF Examples, EMF SDK + Eclipse SDK..."/>
-	<ant target="getDependency" antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
-		<property name="url" value="${oclURL}"/>
-		<property name="file" value="${oclFile}"/>
-		<property name="isUnpackedFile" value="${buildDirectory}/plugins/org.eclipse.emf.ocl/plugin.xml"/>
-	</ant>
-	<ant target="getDependency" antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
-		<property name="url" value="${emfURL}"/>
-		<property name="file" value="${emfFile}"/>
-		<property name="isUnpackedFile" value="${buildDirectory}/plugins/org.eclipse.emf.ecore/plugin.xml"/>
-	</ant>
-	<ant target="getDependency" antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
-		<property name="url" value="${emfBuildURL}/${emfExamplesFile}"/>
-		<property name="file" value="${emfExamplesFile}"/>
-		<property name="isUnpackedFile" value="${buildDirectory}/plugins/org.eclipse.emf.examples/plugin.xml"/>
-	</ant>
-	<ant target="getDependency" antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
-		<property name="url" value="${eclipseURL}"/>
-		<property name="file" value="${eclipseFile}"/>
-		<property name="isUnpackedFile" value="${buildDirectory}/plugins/org.eclipse.platform.doc.isv/plugin.xml" />
-	</ant>
 </target>
 
 <!-- ===================================================================== -->
