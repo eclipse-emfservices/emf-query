@@ -12,8 +12,10 @@
 		<antcall target="loadbuildConfig"/>
 			
 		<echo message="Unpack Eclipse SDK to ${testDir}..."/>
+		<echo message="customTest.xml: basedir = ${basedir}"/>
 		<property name="getTestDependencies.xml" value="${testDir}/../../org.eclipse.emft.common.releng/scripts/getTestDependencies.xml"/>
 		<ant target="getTestDependency" antfile="${getTestDependencies.xml}">
+			<property name="basedir" value="${basedir}"/>
 			<property name="url" value="${eclipseURL}"/>
 			<property name="file" value="${eclipseFile}"/>
 			<property name="unpackDest" value="${testDir}"/>

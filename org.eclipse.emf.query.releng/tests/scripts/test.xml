@@ -3,9 +3,8 @@
 	<!--properties file containing the plugin directory name including version number-->
 	<property file="test.properties" />
 	
-	<property name="buildDirectory" location="${basedir}/../src/eclipse" />
-	<property name="transientPropertiesFile" value="${buildDirectory}/transientProperties.txt" />
-	<available file="${transientPropertiesFile}" type="file" property="transientPropertiesIsAvailable" />
+	<!-- urls and such from the build -->
+	<property file="${basedir}/../../../build.cfg" />
 
 	<!--default directory where test-eclipse will be installed-->
 	<property name="install" value="${basedir}/target" />
@@ -19,49 +18,42 @@
 	<!-- The directory that will contain the xml and html results from the tests that are run -->
  	<property name="results" value="${basedir}/results" />
 
-	<target name="init">
-	</target>
-
-	<target name="loadTransientProperties" if="transientPropertiesIsAvailable">
-		<property file="${transientPropertiesFile}" />
-	</target>
-
 	<target name="setup" if="clean" description="Reinstall the test Eclipse installation if specified by user">
-		<antcall target="loadTransientProperties"/>
-		<echo message="install: ${install}"/>
-		<delete dir="${install}" />
-		<mkdir dir="${install}" />
+		<!-- <echo message="test.xml: basedir = ${basedir}"/> -->		
+		<!-- <echo message="install = ${install}"/> -->
+		<delete dir="${install}" /><mkdir dir="${install}" />
 			
 		<echo message="Download, then unpack: UML2 SDK, EMFT OCL SDK, EMF Examples, EMF SDK + Eclipse SDK..."/>
-		<property name="getTestDependencies.xml" value="${buildDirectory}/../../../../org.eclipse.emft.common.releng/scripts/getTestDependencies.xml"/>
-		<ant target="getTestDependency" antfile="${getTestDependencies.xml}">
+		<property name="getTestDependencies.xml" value="${basedir}/../../../org.eclipse.emft.common.releng/scripts/getTestDependencies.xml"/>
+		<ant target="getTestDependency" antfile="${getTestDependencies.xml}" dir="${basedir}/../../../org.eclipse.emft.common.releng">
 			<property name="url" value="${uml2URL}"/>
 			<property name="file" value="${uml2File}"/>
 			<property name="unpackDest" value="${install}"/>
 		</ant>
-		<ant target="getTestDependency" antfile="${getTestDependencies.xml}">
+		<ant target="getTestDependency" antfile="${getTestDependencies.xml}" dir="${basedir}/../../../org.eclipse.emft.common.releng">
 			<property name="url" value="${oclURL}"/>
 			<property name="file" value="${oclFile}"/>
 			<property name="unpackDest" value="${install}"/>
 		</ant>
-		<ant target="getTestDependency" antfile="${getTestDependencies.xml}">
-			<property name="url" value="${emfURL}"/>
-			<property name="file" value="${emfFile}"/>
-			<property name="unpackDest" value="${install}"/>
-		</ant>
-		<ant target="getTestDependency" antfile="${getTestDependencies.xml}">
+		<ant target="getTestDependency" antfile="${getTestDependencies.xml}" dir="${basedir}/../../../org.eclipse.emft.common.releng">
 			<property name="url" value="${emfBuildURL}/${emfExamplesFile}"/>
 			<property name="file" value="${emfExamplesFile}"/>
 			<property name="unpackDest" value="${install}"/>
 		</ant>
-		<ant target="getTestDependency" antfile="${getTestDependencies.xml}">
+		<ant target="getTestDependency" antfile="${getTestDependencies.xml}" dir="${basedir}/../../../org.eclipse.emft.common.releng">
+			<property name="url" value="${emfURL}"/>
+			<property name="file" value="${emfFile}"/>
+			<property name="unpackDest" value="${install}"/>
+		</ant>
+		<ant target="getTestDependency" antfile="${getTestDependencies.xml}" dir="${basedir}/../../../org.eclipse.emft.common.releng">
 			<property name="url" value="${eclipseURL}"/>
 			<property name="file" value="${eclipseFile}"/>
 			<property name="unpackDest" value="${install}"/>
 		</ant>
-		<echo message="Unpack JUnit Tests ..."/>		
+		<property name="dir" location="."/>
+		<echo message="Unpack EMFT + JUnit Tests (${dir}/emft-*.zip) ..."/>		
 		<unzip dest="${install}" overwrite="true">
-		    <fileset dir="."><include name="**/emft-${subprojectName}-junit-tests-*.zip"/></fileset>
+		    <fileset dir="${dir}"><include name="**/emft-*.zip"/></fileset>
 		</unzip>
 	</target>
 

@@ -235,6 +235,10 @@
 			<replacefilter token="@oclFile@" value="${oclFile}" />
 			<replacefilter token="@oclURL@" value="${oclURL}" />
 			<replacefilter token="@oclBuildURL@" value="${oclBuildURL}" />
+
+			<replacefilter token="@uml2File@" value="${oclFile}" />
+			<replacefilter token="@uml2URL@" value="${oclURL}" />
+			<replacefilter token="@uml2BuildURL@" value="${oclBuildURL}" />
 		</replace>
 		<antcall target="doExtraReplacements" />
 

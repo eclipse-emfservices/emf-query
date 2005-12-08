@@ -85,6 +85,7 @@ then
 		rm -rf $dir/workspace
 	fi
 
+	echo "[runtests] Currently in `pwd`:"
 	# need conditional processing here: M3.0.2 = zip, I3.1.0 = tar.gz
 	sdks=`find $dir -name "eclipse-SDK-*"`
 	# get extension from file(s)
@@ -113,35 +114,7 @@ then
 		fi
 	done
 
-	for z in `find . -name "emf-*.zip"`; do
-		echo "[runtests] Unpack $z ..."
-		unzip -qq -o emf-*.zip
-	done
-	
-	for z in `find . -name "emft-*-SDK-*.zip"`; do
-		echo "[runtests] Unpack $z ..."
-		unzip -qq -o $z
-	done
-
-	for z in `find . -name "emft-*-junit-tests-*.zip"`; do
-		echo "[runtests] Unpack $z ..."
-		unzip -qq -o -C $z */plugins/org.eclipse.test*
-	done
-
-	if [ "$installmode" = "noclean" ]
-	then		
-		# if tests are to run without reinstalling eclipse, only install the test eclipse if it does not exist
-		# if the test-eclipse directory is in a partially installed state, it should be deleted manually
-		if [ ! -r target/eclipse ]
-		then
-			echo "[runtests] [`date +%H\:%M\:%S`] Launching Eclipse (installmode = $installmode) ..."
-			$vm -cp $cp org.eclipse.core.launcher.Main -noupdate -ws $ws -os $os -arch $arch -application org.eclipse.ant.core.antRunner -data $workspaceDir -file test.xml setup -Dws=$ws -Dos=$os -Darch=$arch -Dclean=true -logger org.apache.tools.ant.DefaultLogger
-			echo "[runtests] [`date +%H\:%M\:%S`] Eclipse run completed. "
-		fi
-	fi
-
 	# run tests
-
 	echo "[runtests] [`date +%H\:%M\:%S`] Launching Eclipse (installmode = $installmode) ..."
 	execCmd "$vm $Xflags -cp $cp org.eclipse.core.launcher.Main -noupdate -ws $ws -os $os -arch $arch -application org.eclipse.ant.core.antRunner -data $workspaceDir -file test.xml $Dflags -Dws=$ws -Dos=$os -Darch=$arch -D$installmode=true $properties -logger org.apache.tools.ant.DefaultLogger";
 	echo "[runtests] [`date +%H\:%M\:%S`] Eclipse test run completed. "

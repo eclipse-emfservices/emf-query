@@ -36,10 +36,6 @@
 			<effectedFile id="SDK"></effectedFile>
 			<effectedFile id="projRUN"></effectedFile>
 		</logFile>
-		<logFile name="org.eclipse.emf.query.ocl.tests_linux.gtk.xml">
-			<effectedFile id="SDK"></effectedFile>
-			<effectedFile id="projRUN"></effectedFile>
-		</logFile>
 	
 	<!-- Comment out for now until we get tests on various platforms.
 		<logFile name="org.eclipse.emf.query.tests_win32.xml">

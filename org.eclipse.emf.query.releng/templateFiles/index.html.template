@@ -37,11 +37,12 @@ To view the Overall Build Log for this Build click <a href="buildlog.txt">here</
 	</tr>
 	<tr><td>
 		<br/>
-		EMFT Query requires Eclipse, EMF and EMFT OCL to run.  The Eclipse driver used in this build was
-		<a href="@eclipseURL@">@eclipseFile@</a> - for details on this driver or to download it
-		for your platform, check out its <a href="@eclipseBuildURL@">build page</a>. The EMF build
-		was <a href="@emfURL@">@emfFile@</a> from this <a href="@emfBuildURL@">build page</a>. The OCL build
-		was <a href="@oclURL@">@oclFile@</a> from this <a href="@oclBuildURL@">build page</a>.
+		EMFT Query requires Eclipse, EMF and EMFT OCL to run, and UML2 for its tests.
+		The Eclipse driver used in this build was <a href="@eclipseURL@">@eclipseFile@</a> - for details on this driver or to download it
+		for your platform, check out its <a href="@eclipseBuildURL@">build page</a>. 
+		The EMF build was <a href="@emfURL@">@emfFile@</a> from this <a href="@emfBuildURL@">build page</a>. 
+		The OCL build was <a href="@oclURL@">@oclFile@</a> from this <a href="@oclBuildURL@">build page</a>.
+		The UML2 build was <a href="@uml2URL@">@uml2File@</a> from this <a href="@uml2BuildURL@">build page</a>.
 	</td></tr>
 </table>
 
