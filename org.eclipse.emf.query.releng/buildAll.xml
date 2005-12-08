@@ -171,7 +171,6 @@
 		<copy todir="${buildDirectory}/.." failonerror="false" overwrite="true">
 			<fileset dir="${buildDirectory}/${buildLabel}" />
 		</copy>
-		<delete dir="${buildDirectory}" />
 	</target>
 
 	<!-- 
