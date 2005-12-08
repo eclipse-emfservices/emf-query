@@ -1,17 +1,28 @@
-<project name="Customized testing instructions" default="noDefault">
+<project name="Customized testing instructions" default="customSetup">
 
-	<property name="transientPropertiesFile" value="${buildDirectory}/transientProperties.txt" />
-	<available file="${transientPropertiesFile}" type="file" property="transientPropertiesIsAvailable" />
+	<property name="buildConfigFile" value="${testDir}/../../build.cfg" />
+	<available file="${buildConfigFile}" type="file" property="buildConfigIsAvailable" />
 
-	<target name="loadTransientProperties" if="transientPropertiesIsAvailable">
-		<property file="${transientPropertiesFile}" />
+	<target name="loadbuildConfig" if="buildConfigIsAvailable">
+		<property file="${buildConfigFile}" />
 	</target>
 
 	<target name="customSetup">
-		<antcall target="loadTransientProperties"/>
-	
-		<antcall target="installVM"/>
-
+		<fail unless="buildConfigIsAvailable" message="ERROR! Can't find ${buildConfigFile}"/>
+		<antcall target="loadbuildConfig"/>
+			
+		<echo message="Unpack Eclipse SDK to ${testDir}..."/>
+		<property name="getTestDependencies.xml" value="${testDir}/../../org.eclipse.emft.common.releng/scripts/getTestDependencies.xml"/>
+		<ant target="getTestDependency" antfile="${getTestDependencies.xml}">
+			<property name="url" value="${eclipseURL}"/>
+			<property name="file" value="${eclipseFile}"/>
+			<property name="unpackDest" value="${testDir}"/>
+		</ant>
+		
+		<echo message="Copy UML2 SDK, EMFT OCL SDK, EMF Examples, EMF SDK + Eclipse SDK to ${executionDir}..."/>
+		<copy todir="${executionDir}">
+			<fileset dir="${downloadsDir}" includes="${uml2File},${oclFile},${emfExamplesFile},${emfFile},${eclipseFile}"/>
+		</copy>
 		<property name="shell" value="relengbuildgtk.sh"/>
 	
 		<!--copy the script which invokes the tests -->
@@ -21,48 +32,7 @@
 		<!--copy the testing.property files  -->
 		<copy file="${tester}/testing.properties" todir="${executionDir}"/>
 
-		<!--copy the runtimes to install for testing, excluding the JUnit plug-in tests-->
-		<!-- if there's already an existing eclipse zip by the same name in the dest folder, don't download it again! -->
-		<available file="${downloadsDir}/${eclipseFile}" property="eclipseZipExists"/>
-		<antcall target="downloadEclipse" />
-		
-		<copy file="${downloadsDir}/${eclipseFile}" todir="${executionDir}"/>
-
-		<available file="${downloadsDir}/${emfFile}" property="emfZipExists"/>
-		<antcall target="downloadEMF" />
-
-		<copy file="${downloadsDir}/${emfFile}" todir="${executionDir}"/>
-
 		<!-- at this point, we exit from this script and back into the parent script (presumably in pde or eclipse.releng?) -->
 		<echo message="Running relengbuildgtk.sh ..."/>
 	</target>
-	
-	<target name="downloadEclipse" unless="eclipseZipExists">
-		<get src="${eclipseURL}" dest="${downloadsDir}/${eclipseFile}" usetimestamp="true"/>
-		<touch file="${downloadsDir}/${eclipseFile}"/>
-	</target>
-
-	<target name="downloadEMF" unless="emfZipExists">
-		<get src="${emfURL}" dest="${downloadsDir}/${emfFile}" usetimestamp="true"/>
-		<touch file="${downloadsDir}/${emfFile}"/>
-	</target>
-	
-	<target name="installVM" if="doVmInstall">
-		<!-- note: only gzip, zip and bzip2 are supported; compress (.tar.Z) is not -->
-		<condition property="isVmFileZip"><contains string="${vmFile}" substring=".zip" /></condition>
-		<condition property="isVmFileTarGz"><contains string="${vmFile}" substring=".tar.gz" /></condition>
-		
-		<antcall target="vmFileUnZip" />
-		<antcall target="vmFileUnTarGz" />
-	</target>
-
-	<target name="vmFileUnTarGz" if="isVmFileTarGz">
-		<untar compression="gzip" src="${downloadsDir}/${vmFileName}" dest="${testDir}/" overwrite="true"/>
-	</target>
-
-	<target name="vmFileUnZip" if="isVmFileZip">
-		<unzip src="${downloadsDir}/${vmFileName}" dest="${testDir}/" overwrite="true"/>
-	</target>
-
-	<target name="noDefault"/>
 </project>
