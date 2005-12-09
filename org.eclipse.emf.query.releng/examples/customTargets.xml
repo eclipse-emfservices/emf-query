@@ -101,6 +101,17 @@
 		<replace dir="${buildDirectory}/plugins" value="${timestamp}" token="@buildid@">
 			<include name="**/about.mappings" />
 		</replace>
+		<!-- hack: unpacked emf-*Examples*.zip includes folders w/ jars in them, but the generated build.xml doesn't find them, so copy 
+			 the jars to "@dot" so they can be included in the classpath 
+			<pathelement path="../org.eclipse.emf.examples.library/@dot"/>
+            <pathelement path="../org.eclipse.emf.examples.library.edit/@dot"/>
+            <pathelement path="../org.eclipse.emf.examples.library.editor/@dot"/>
+   		-->
+		<echo message="Copy org.eclipse.emf.examples.library*/*.jar to org.eclipse.emf.examples.library*/@dot (PDE can't resolve them correctly as folders) ..."/>
+		<copy tofile="${buildDirectory}/plugins/org.eclipse.emf.examples.library/@dot" file="${buildDirectory}/plugins/org.eclipse.emf.examples.library/org.eclipse.emf.examples.library.jar"/>
+		<copy tofile="${buildDirectory}/plugins/org.eclipse.emf.examples.library.edit/@dot" file="${buildDirectory}/plugins/org.eclipse.emf.examples.library.edit/org.eclipse.emf.examples.library.edit.jar"/>
+		<copy tofile="${buildDirectory}/plugins/org.eclipse.emf.examples.library.editor/@dot" file="${buildDirectory}/plugins/org.eclipse.emf.examples.library.editor/org.eclipse.emf.examples.library.editor.jar"/>
+		
 	</target>
 
 	<!-- ===================================================================== -->
