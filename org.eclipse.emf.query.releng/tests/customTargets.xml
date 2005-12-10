@@ -116,7 +116,7 @@
 	<echo message="Run ChangeBundleClasspath in bundlesDirectory: ${buildDirectory}/plugins" />
 	<java classname="org.eclipse.emft.common.build.ChangeBundleClasspath" 
 		classpath="${projBuilderDir}/org.eclipse.emft.common.build/emft.common.build.jar">
-	    <arg line="-bundleDirectoryMatchRegex org\.eclipse\.emf\.*" />
+	    <arg line="-bundleDirectoryMatchRegex org\\.eclipse\\.emf.*" />
 		<arg line="-bundlesDirectory ${buildDirectory}/plugins" />
 		<arg line="-includeTest"/>
 		<arg line="-verbose" />
