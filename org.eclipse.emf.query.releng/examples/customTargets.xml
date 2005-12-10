@@ -66,25 +66,42 @@
 	<!-- Steps to do after setup but before starting the build proper -->
 	<!-- ===================================================================== -->
 	<target name="postSetup">
-		<ant target="getDependency" antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
+		<property name="getDeps.xml" location="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml"/>
+		<echo message="Download, then unpack: EMFT OCL SDK, EMF Examples, EMF SDK + Eclipse SDK..."/>
+		<ant target="getDependency" antfile="${getDeps.xml}">
 			<property name="url" value="${oclURL}"/>
 			<property name="file" value="${oclFile}"/>
 			<property name="isUnpackedFile" value="${buildDirectory}/plugins/org.eclipse.emf.ocl/plugin.xml"/>
 		</ant>
-		<ant target="getDependency" antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
+		<ant target="getDependency" antfile="${getDeps.xml}">
 			<property name="url" value="${emfURL}"/>
 			<property name="file" value="${emfFile}"/>
 			<property name="isUnpackedFile" value="${buildDirectory}/plugins/org.eclipse.emf.ecore/plugin.xml"/>
 		</ant>
-		<ant target="getDependency" antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
+		<ant target="getDependency" antfile="${getDeps.xml}">
 			<property name="url" value="${emfBuildURL}/${emfExamplesFile}"/>
 			<property name="file" value="${emfExamplesFile}"/>
 			<property name="isUnpackedFile" value="${buildDirectory}/plugins/org.eclipse.emf.examples/plugin.xml"/>
 		</ant>
-		<ant target="getDependency" antfile="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml">
+		<ant target="getDependency" antfile="${getDeps.xml}">
 			<property name="url" value="${eclipseURL}"/>
 			<property name="file" value="${eclipseFile}"/>
 			<property name="isUnpackedFile" value="${buildDirectory}/plugins/org.eclipse.platform.doc.isv/plugin.xml" />
+		</ant>
+		<!-- unpack examples plugins since actual code is nested inside the jar and can't be found by javac -->
+		<echo message="Massage emf.examples.library*.jar to expose class files..."/>
+		<property name="getDeps.xml" location="${buildDirectory}/../org.eclipse.emft.common.releng/scripts/getDependencies.xml"/>
+		<ant target="massagePluginJar" antfile="${getDeps.xml}">
+			<property name="theJar" value="org.eclipse.emf.examples.library.jar"/>
+			<property name="theDir" value="${buildDirectory}/plugins"/>
+		</ant>
+		<ant target="massagePluginJar" antfile="${getDeps.xml}">
+			<property name="theJar" value="org.eclipse.emf.examples.library.edit.jar"/>
+			<property name="theDir" value="${buildDirectory}/plugins"/>
+		</ant>
+		<ant target="massagePluginJar" antfile="${getDeps.xml}">
+			<property name="theJar" value="org.eclipse.emf.examples.library.editor.jar"/>
+			<property name="theDir" value="${buildDirectory}/plugins"/>
 		</ant>
 	</target>
 
@@ -102,7 +119,7 @@
 			<include name="**/about.mappings" />
 		</replace>
 	</target>
-
+		
 	<!-- ===================================================================== -->
 	<!-- Steps to do before generating build scripts -->
 	<!-- ===================================================================== -->
