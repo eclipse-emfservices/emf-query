@@ -107,6 +107,14 @@
 	<!-- Steps to do before generating build scripts -->
 	<!-- ===================================================================== -->
 	<target name="preGenerate">
+		<property name="projBuilderDir" location="${buildDirectory}/../org.eclipse.emft/releng/${subprojectName}" />
+		<echo message="projBuilderDir: ${projBuilderDir}" />
+		<java classname="org.eclipse.emft.common.build.ChangeBundleClasspath" 
+			classpath="${projBuilderDir}/org.eclipse.emft.common.build/emft.common.build.jar">
+		    <arg line="-bundleDirectoryMatchRegex org\.eclipse\.emf\.query\.*" />
+			<arg line="-bundlesDirectory ${buildDirectory}/plugins" />
+			<arg line="-verbose" />
+		</java>
 	</target>
 
 	<!-- ===================================================================== -->
