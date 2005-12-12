@@ -138,25 +138,25 @@
 
 	<target name="buildAll" depends="init">
 		<ant antfile="build.xml" target="main">
-			<property name="component" value="sdk" />
+			<property name="component" value="builder/sdk" />
 		</ant>
 
 		<ant antfile="build.xml" target="main">
-			<property name="component" value="${subprojectName}/runtime" />
+			<property name="component" value="builder/runtime" />
 		</ant>
 
 		<ant antfile="build.xml" target="main">
-			<property name="component" value="examples" />
+			<property name="component" value="builder/examples" />
 		</ant>
 
 		<ant antfile="build.xml" target="main">
-			<property name="component" value="tests" />
+			<property name="component" value="builder/tests" />
 		</ant>
 
 		<!-- doc must be the last execution -->
 
 		<ant antfile="build.xml" target="main">
-			<property name="component" value="${subprojectName}/doc" />
+			<property name="component" value="builder/doc" />
 		</ant>
 
 		<!-- md5 files generation -->
@@ -192,21 +192,21 @@
 	<target name="test-win32-local" if="isWindows">
 		<ant antfile="${test.xml}">
 			<property name="shell" value="relengbuildwin2.bat" />
-			<property name="tester" value="${basedir}/tests/configs/local" />
+			<property name="tester" value="${basedir}/builder/tests/configs/local" />
 		</ant>
 	</target>
 
 	<target name="test-linux-gtk-local" if="isLinuxGTK">
 		<ant antfile="${test.xml}">
 			<property name="shell" value="relengbuildgtk.sh" />
-			<property name="tester" value="${basedir}/tests/configs/local" />
+			<property name="tester" value="${basedir}/builder/tests/configs/local" />
 		</ant>
 	</target>
 
 	<target name="test-linux-motif-local" if="isLinuxMotif">
 		<ant antfile="${test.xml}">
 			<property name="shell" value="relengbuildmotif.sh" />
-			<property name="tester" value="${basedir}/tests/configs/local" />
+			<property name="tester" value="${basedir}/builder/tests/configs/local" />
 		</ant>
 	</target>
 
