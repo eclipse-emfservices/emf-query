@@ -19,7 +19,7 @@
 
 <p>To view the Release Notes for this Build click <a href="http://www.eclipse.org/emft/news/release-notes.xml">here</a>.<br>
 To view the Test Results and Compile Logs for this build click <a href="testResults.php">here</a>.<BR>
-To view the Map File Entries for this Build click <a href="directory.txt">here</a>.<br>
+To view the Map File Entries for this Build click <a href="map.cfg">here</a>.<br>
 To view the Overall Build Log for this Build click <a href="buildlog.txt">here</a>.<br>
 
 <p> Click <a href="verifyMD5.html">here</a> for instructions on how to verify the integrity of your downloads.</p></td></tr>
