@@ -162,7 +162,7 @@
 		<!-- md5 files generation -->
 
 		<exec executable="bash" dir="${buildDirectory}/${buildLabel}">
-			<arg line="${basedir}/scripts/createZipCheckSum.sh" />
+			<arg line="${basedir}/../org.eclipse.emft.common.releng/scripts/createZipCheckSum.sh" />
 		</exec>
 	</target>
 
@@ -235,13 +235,13 @@
 			<replacefilter token="@oclURL@" value="${oclURL}" />
 			<replacefilter token="@oclBuildURL@" value="${oclBuildURL}" />
 
-			<replacefilter token="@uml2File@" value="${oclFile}" />
-			<replacefilter token="@uml2URL@" value="${oclURL}" />
-			<replacefilter token="@uml2BuildURL@" value="${oclBuildURL}" />
+			<replacefilter token="@uml2File@" value="${uml2File}" />
+			<replacefilter token="@uml2URL@" value="${uml2URL}" />
+			<replacefilter token="@uml2BuildURL@" value="${uml2BuildURL}" />
 		</replace>
 		<antcall target="doExtraReplacements" />
 
-		<exec executable="bash" dir="${basedir}/scripts">
+		<exec executable="bash" dir="${basedir}/../org.eclipse.emft.common.releng/scripts">
 			<arg line="./setSizes.sh ${buildDirectory}/${buildLabel} ${result}/${indexFileName}" />
 		</exec>
 	</target>
