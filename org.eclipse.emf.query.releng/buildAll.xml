@@ -162,8 +162,8 @@
 		<!-- add .ocl feature + plugin from SDK to runtime -->
 	    <zip destfile="${buildDirectory}/${buildLabel}/emft-${subprojectName}-runtime-${buildAlias}.zip" update="true">
 			<zipfileset src="${buildDirectory}/${buildLabel}/emft-${subprojectName}-SDK-${buildAlias}.zip">
-				<include name="**/org.eclipse.emf.query.ocl*"/>
-				<include name="**/org.eclipse.emf.query.ocl*/*"/>
+				<include name="**/org.eclipse.emf.${subprojectName}.ocl*"/>
+				<include name="**/org.eclipse.emf.${subprojectName}.ocl*/*"/>
 			</zipfileset>
 	    </zip>
 		
