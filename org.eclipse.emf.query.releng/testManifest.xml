@@ -46,11 +46,11 @@
 	
    <logFile name="plugins/org.eclipse.emf.query_*/*.bin.log">
       <effectedFile id="SDK"></effectedFile>
-      <effectedFile id="UML2RUN"></effectedFile>
+      <effectedFile id="projRUN"></effectedFile>
    </logFile>
    <logFile name="plugins/org.eclipse.emf.query.ocl_*/*.bin.log">
       <effectedFile id="SDK"></effectedFile>
-      <effectedFile id="UML2RUN"></effectedFile>
+      <effectedFile id="projRUN"></effectedFile>
    </logFile>
    <logFile name="plugins/org.eclipse.emf.query.examples_*/*.bin.log">
       <effectedFile id="EX"></effectedFile>
