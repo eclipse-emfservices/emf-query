@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<psf version="2.0">
+	<provider id="org.eclipse.team.cvs.core.cvsnature">
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/technology,org.eclipse.emft/query/plugins/org.eclipse.emf.query,org.eclipse.emf.query,R1_0_maintenance"/>
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/technology,org.eclipse.emft/query/plugins/org.eclipse.emf.query.ocl,org.eclipse.emf.query.ocl,R1_0_maintenance"/>
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/technology,org.eclipse.emft/query/tests/org.eclipse.emf.query.ocl.tests,org.eclipse.emf.query.ocl.tests,R1_0_maintenance"/>
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/technology,org.eclipse.emft/query/tests/org.eclipse.emf.query.tests,org.eclipse.emf.query.tests,R1_0_maintenance"/>
+	</provider>
+</psf>
