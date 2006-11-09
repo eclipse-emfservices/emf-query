@@ -72,6 +72,10 @@
 			<param name="testPlugin" value="${org.eclipse.emf.query.tests}" />
 			<param name="report" value="org.eclipse.emf.query.tests" />
 		</antcall>
+		<antcall target="runtests">
+			<param name="testPlugin" value="${org.eclipse.emf.query.ocl.tests}" />
+			<param name="report" value="org.eclipse.emf.query.ocl.tests" />
+		</antcall>
 
 		<!-- test if chkpii script exists before proceeding -->
 		<property name="chkpii.xml" value="${basedir}/../../../org.eclipse.emft.common.releng/scripts/chkpii.xml"/>
