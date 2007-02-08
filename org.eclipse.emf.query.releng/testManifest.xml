@@ -44,7 +44,36 @@
 		</logFile>
 	-->	
 	
-
+   <logFile name="plugins/org.eclipse.emf.query.examples_*/*.bin.log">
+      <effectedFile id="EX"></effectedFile>
+   </logFile>
+   <logFile name="plugins/org.eclipse.emf.query.examples.ocl_*/*.bin.log">
+      <effectedFile id="EX"></effectedFile>
+   </logFile>
+   <logFile name="plugins/org.eclipse.emf.query.examples_*/*.bin.log">
+      <effectedFile id="EX"></effectedFile>
+   </logFile>
+   <logFile name="plugins/org.eclipse.emf.query.examples.statements_*/*.bin.log">
+      <effectedFile id="EX"></effectedFile>
+   </logFile>
+   <logFile name="plugins/org.eclipse.emf.query_*/*.bin.log">
+      <effectedFile id="SDK"></effectedFile>
+      <effectedFile id="projRUN"></effectedFile>
+   </logFile>
+   <logFile name="plugins/org.eclipse.emf.query.ocl_*/*.bin.log">
+      <effectedFile id="SDK"></effectedFile>
+      <effectedFile id="projRUN"></effectedFile>
+   </logFile>
+   <logFile name="plugins/org.eclipse.emf.query_*/*.bin.log">
+      <effectedFile id="SDK"></effectedFile>
+      <effectedFile id="projRUN"></effectedFile>
+   </logFile>
+   <logFile name="plugins/org.eclipse.emf.query.ocl.tests_*/*.bin.log">
+      <effectedFile id="T"></effectedFile>
+   </logFile>
+   <logFile name="plugins/org.eclipse.emf.query.tests_*/*.bin.log">
+      <effectedFile id="T"></effectedFile>
+   </logFile>
 
 	</logFiles>
 </topLevel>
