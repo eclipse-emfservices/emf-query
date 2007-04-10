@@ -5,28 +5,28 @@
 			<platform 
 				id="projRUN" 
 				name="All" 
-				fileName='&lt;a href="emft-query-runtime-@build@.zip"&gt;emft-query-runtime-@build@.zip&lt;/a&gt; &lt;font size="2"&gt;(size:@emft-query-runtime-@build@.zip.size@ - checksum:&lt;a href="emft-query-runtime-@build@.zip.md5"&gt;md5&lt;/a&gt;)&lt;/font&gt;'>
+				fileName='&lt;a href="emf-query-runtime-@build@.zip"&gt;emf-query-runtime-@build@.zip&lt;/a&gt; &lt;font size="2"&gt;(size:@emf-query-runtime-@build@.zip.size@ - checksum:&lt;a href="emf-query-runtime-@build@.zip.md5"&gt;md5&lt;/a&gt;)&lt;/font&gt;'>
 			</platform>
 		</zipType>
 		<zipType name="projsdk">
 			<platform 
 				id="projSRC" 
 				name="All" 
-				fileName='&lt;a href="emft-query-SDK-@build@.zip"&gt;emft-query-SDK-@build@.zip&lt;/a&gt; &lt;font size="2"&gt;(size:@emft-query-SDK-@build@.zip.size@ - checksum:&lt;a href="emft-query-SDK-@build@.zip.md5"&gt;md5&lt;/a&gt;)&lt;/font&gt;'>
+				fileName='&lt;a href="emf-query-SDK-@build@.zip"&gt;emf-query-SDK-@build@.zip&lt;/a&gt; &lt;font size="2"&gt;(size:@emf-query-SDK-@build@.zip.size@ - checksum:&lt;a href="emf-query-SDK-@build@.zip.md5"&gt;md5&lt;/a&gt;)&lt;/font&gt;'>
 			</platform>
 		</zipType>
 		<zipType name="projtests">
 			<platform 
 				id="T" 
 				name="All" 
-				fileName='&lt;a href="emft-query-automated-tests-@build@.zip"&gt;emft-query-automated-tests-@build@.zip&lt;/a&gt; &lt;font size="2"&gt;(size:@emft-query-automated-tests-@build@.zip.size@ - checksum:&lt;a href="emft-query-automated-tests-@build@.zip.md5"&gt;md5&lt;/a&gt;)&lt;/font&gt;'>
+				fileName='&lt;a href="emf-query-automated-tests-@build@.zip"&gt;emf-query-automated-tests-@build@.zip&lt;/a&gt; &lt;font size="2"&gt;(size:@emf-query-automated-tests-@build@.zip.size@ - checksum:&lt;a href="emf-query-automated-tests-@build@.zip.md5"&gt;md5&lt;/a&gt;)&lt;/font&gt;'>
 			</platform>
 		</zipType>
 		<zipType name="projexamples">
 			<platform 
 				id="EX" 
 				name="All" 
-				fileName='&lt;a href="emft-query-examples-@build@.zip"&gt;emft-query-examples-@build@.zip&lt;/a&gt; &lt;font size="2"&gt;(size:@emft-query-examples-@build@.zip.size@ - checksum:&lt;a href="emft-query-examples-@build@.zip.md5"&gt;md5&lt;/a&gt;)&lt;/font&gt;'>
+				fileName='&lt;a href="emf-query-examples-@build@.zip"&gt;emf-query-examples-@build@.zip&lt;/a&gt; &lt;font size="2"&gt;(size:@emf-query-examples-@build@.zip.size@ - checksum:&lt;a href="emf-query-examples-@build@.zip.md5"&gt;md5&lt;/a&gt;)&lt;/font&gt;'>
 			</platform>
 		</zipType>
 	</zipTypes>
