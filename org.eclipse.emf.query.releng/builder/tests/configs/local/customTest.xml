@@ -23,7 +23,7 @@
 		
 		<echo message="Copy UML2 SDK, OCL SDK, EMF Examples, EMF SDK + Eclipse SDK to ${executionDir}..."/>
 		<copy todir="${executionDir}">
-			<fileset dir="${downloadsDir}" includes="${uml2File},${oclFile},${emfExamplesFile},${emfFile},${eclipseFile}"/>
+			<fileset dir="${downloadsDir}" includes="${oclFile},${emfExamplesFile},${emfFile},${eclipseFile}"/>
 		</copy>
 		<property name="shell" value="relengbuildgtk.sh"/>
 	
