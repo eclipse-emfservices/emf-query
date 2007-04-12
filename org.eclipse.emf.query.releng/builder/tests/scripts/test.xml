@@ -23,13 +23,8 @@
 		<!-- <echo message="install = ${install}"/> -->
 		<delete dir="${install}" /><mkdir dir="${install}" />
 			
-		<echo message="Download, then unpack: UML2 SDK, OCL SDK, EMF Examples, EMF SDK + Eclipse SDK..."/>
+		<echo message="Download, then unpack: OCL SDK, EMF Examples, EMF SDK + Eclipse SDK..."/>
 		<property name="getTestDependencies.xml" value="${basedir}/../../../org.eclipse.modeling.common.releng/scripts/getTestDependencies.xml"/>
-		<ant target="getTestDependency" antfile="${getTestDependencies.xml}" dir="${basedir}/../../../org.eclipse.modeling.common.releng">
-			<property name="url" value="${uml2URL}"/>
-			<property name="file" value="${uml2File}"/>
-			<property name="unpackDest" value="${install}"/>
-		</ant>
 		<ant target="getTestDependency" antfile="${getTestDependencies.xml}" dir="${basedir}/../../../org.eclipse.modeling.common.releng">
 			<property name="url" value="${oclURL}"/>
 			<property name="file" value="${oclFile}"/>
