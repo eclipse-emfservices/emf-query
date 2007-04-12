@@ -129,7 +129,6 @@
 <!-- Steps to do after generating the build scripts -->
 <!-- ===================================================================== -->
 <target name="postGenerate">
-	<antcall target="clean" />
 </target>
 
 <!-- ===================================================================== -->
@@ -203,7 +202,7 @@
 	<!--unzip the junit tests-->
     <mkdir dir="${workingDirectory}/eclipse" />
 	<unzip dest="${workingDirectory}" overwrite="true">
-		<fileset dir="${buildDirectory}/${buildLabel}"><include name="**/emft*junit*.zip"/></fileset>
+		<fileset dir="${buildDirectory}/${buildLabel}"><include name="**/emf-${subprojectName}-junit-tests*.zip"/></fileset>
 	</unzip>
 	
 	<!-- create top level testing directory-->    
@@ -216,7 +215,6 @@
     <!--eclipse.home is relative to the scripts directory in the org.eclipse.pde.build plugin.  Assume the plugins used in the classpath are in the same directory as org.eclipse.pde.build-->
     <property name="eclipse.home" value="../../.." />
 
-	<!-- new 2005-08-16 -->
     <generateTestProperties 
             buildDirectory="${buildDirectory}" 
             featureId="org.eclipse.emf.${subprojectName}.tests" 
