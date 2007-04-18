@@ -1,5 +1,21 @@
 <project default="run">
 	
+	<!--
+		Steps
+		
+		1.  Build master feature which includes all features and plug-ins.
+		2.  Sign master zip.
+		3.  Repackage signed master.zip into distributables.  Start tests as soon as plug-ins are packaged.
+		4.  Publish test results. 
+	
+	 	Ant properties available at runtime: 
+	
+	 - eclipse.pdebuild.scripts: the org.eclipse.eclipse.pdebuild.scripts folder
+	 - eclipse.pdebuild.home: the root folder of pde build
+	 - eclipse.pdebuild.templates: the  templates folder
+
+	-->
+	
 	<target name="init">
 
 		<echo message="Set compilerArgs = '-enableJavadoc -encoding ISO-8859-1 -warn:-serial,nls,unchecked'"/>
@@ -26,7 +42,7 @@
 		<antcall target="create.label.properties" />
 		<property file="${buildDirectory}/label.properties" />
 		
-		<echo message="buildAll.xml properties:"/>
+		<echo message="buildMasterFeature.xml properties:"/>
 		<echo message="basedir = ${basedir}"/>
 
 		<!-- load a value for ${subprojectName} -->
@@ -87,79 +103,150 @@
 		</echo>
 	</target>
 
-	<!-- main entry points are run, runtestsOnly, runWithoutTest, and buildOnly -->
-	
 	<target name="run" depends="init">
-		<antcall target="buildAll" />
-		<antcall target="test" />
+        <antcall target="buildMasterFeature" />
+        <antcall target="signMasterFeature" />
+        <antcall target="packMasterFeature" />
+        <antcall target="unpackUpdateJarsForPackaging" />
+        <antcall target="buildUpdateSite" />
+		<antcall target="buildZips"/>
+        <antcall target="test" />
 		<antcall target="publish" />
 		<antcall target="cleanUp" />
 	</target>
 
-	<target name="runTestsOnly" depends="init">
-		<delete dir="${buildDirectory}" />
-		<mkdir dir="${buildDirectory}/${buildLabel}" />
-		<copy todir="${buildDirectory}/${buildLabel}">
-			<fileset dir="${buildDirectory}/..">
-				<include name="**/*.zip" />
-			</fileset>
-		</copy>
-		<antcall target="test" />
-		<antcall target="publish" />
-		<antcall target="cleanUp" />
+	<target name="buildMasterFeature">
+		<ant antfile="build.xml" target="main">
+			<property name="component" value="builder/master" />
+		</ant>
 	</target>
 
-	<target name="runWithoutTest" depends="init">
-		<antcall target="buildAll" />
-		<antcall target="publish" />
-		<antcall target="cleanUp" />
-	</target>
+	<target name="buildZips">
+		<ant antfile="${basedir}/builder/zips/build.xml"/>
 
-	<target name="buildOnly" depends="init">
-		<antcall target="buildAll" />
-		<antcall target="cleanUp" />
-	</target>
-
-	<target name="buildAll">
-		<ant antfile="build.xml" target="main">
-			<property name="component" value="builder/sdk" />
-		</ant>
-
-		<ant antfile="build.xml" target="main">
-			<property name="component" value="builder/runtime" />
-		</ant>
-
-		<ant antfile="build.xml" target="main">
-			<property name="component" value="builder/examples" />
-		</ant>
-
-		<ant antfile="build.xml" target="main">
-			<property name="component" value="builder/tests" />
-		</ant>
-
-		<!-- doc must be the last execution -->
-
-		<ant antfile="build.xml" target="main">
-			<property name="component" value="builder/doc" />
-		</ant>
-
-		<!-- add .ocl feature + plugin from SDK to runtime -->
-	    <zip destfile="${buildDirectory}/${buildLabel}/emf-${subprojectName}-runtime-${buildAlias}.zip" update="true">
-			<zipfileset src="${buildDirectory}/${buildLabel}/emf-${subprojectName}-SDK-${buildAlias}.zip">
-				<include name="**/org.eclipse.emf.${subprojectName}.ocl*"/>
-				<include name="**/org.eclipse.emf.${subprojectName}.ocl*/*"/>
-				<exclude name="**/org.eclipse.*.source*"/>
-				<exclude name="**/org.eclipse.*.source*/**"/>
-				<exclude name="**/*src.zip"/>
-			</zipfileset>
-	    </zip>
-		
 		<!-- md5 files generation -->
-
 		<exec executable="bash" dir="${buildDirectory}/${buildLabel}">
 			<arg line="${basedir}/../org.eclipse.modeling.common.releng/scripts/createZipCheckSum.sh" />
 		</exec>
 	</target>
+
+	<target name="buildUpdateSite" if="updateSite">
+		<ant antfile="${eclipse.build.configs}/../helper.xml" target="buildUpdateJars" />
+	</target>
+
+	<target name="packMasterFeature" unless="skipPack">
+		<property name="archiveName" value="eclipse-master-${buildId}.zip" />
+		<property name="packtmp" value="${buildDirectory}/packtmp" />
+		<mkdir dir="${packtmp}" />	
+		<move file="${buildDirectory}/${buildLabel}/${archiveName}" tofile="${packtmp}/${archiveName}"/>
+		
+		
+	   <!-- update location of jvm arguments --> 
+        <replace file="${eclipse.build.configs}/../../extras/pack200" token="@pack200@" value="${java15-home}/bin/pack200"/>
+		<chmod file="${eclipse.build.configs}/../../extras/pack200" perm="755"/>
+		
+		<!--condition jar if it is not pushed to eclipse.org for signing-->
+		<condition property="repack" value="-repack">
+			<not>
+				<isset property="sign" />
+			</not>
+		</condition>
+		<property name="repack" value="" />
+		
+	   <!--pack200-->		
+	   <java jar="${eclipse.home}/startup.jar"
+	         fork="true"
+		     timeout="10800000"
+		     jvm="${java15-home}/bin/java"
+		     failonerror="true"
+		     maxmemory="768m"
+		     error="${buildDirectory}/errorlog.txt"
+		     dir="${buildDirectory}"
+		     output="${buildDirectory}/jarprocessorlog.txt">
+		     <jvmarg value="-Dorg.eclipse.update.jarprocessor.pack200=${eclipse.build.configs}/../../extras"/>
+		     <arg line="-consolelog -application org.eclipse.update.core.siteOptimizer"/>
+		     <arg line="-jarProcessor -verbose -outputDir ${buildLabel} -processAll -pack ${repack} ${packtmp}/${archiveName}"/>
+		</java>
+	
+	<!--	<delete dir="${packtmp}" /> -->
+	</target>
+
+	 <target name="waitForChangedAttribs" unless="attribs.changed">
+	 	<antcall target="compareAttribs" inheritAll="false">
+	 		<param name="originalAttribs" value="${originalAttribs}" />
+	 	</antcall>
+	 </target>
+
+	 <target name="compareAttribs">
+		<!--poll file for change in attributes-->
+	 	<exec dir="${buildDirectory}" executable="ssh" outputProperty="polledAttribs">
+	 		<arg line="${sshline}"/>
+	 	</exec>
+	 	<echo message="original:  ${originalAttribs}" />
+	 	<condition property="attribChanged">
+	 		<not>
+	 			<contains string="${polledAttribs}" substring="No such file or directory" casesensitive="no" />
+	 		</not>
+		</condition>
+	 	<echo message="polled:  ${polledAttribs}" />
+	 	<antcall target="writeDiffResult" />
+	 	<sleep seconds="120" />
+	 		<available property="attribs.changed" file="${buildDirectory}/attribDiff.txt" />
+	 	<antcall target="waitForChangedAttribs" />
+	 </target>
+
+	 <target name="writeDiffResult" if="attribChanged">
+		<echo message="original: ${originalAttribs}" file="${buildDirectory}/attribDiff.txt" />
+	 	<echo message="new: ${polledAttribs}" file="${buildDirectory}/attribDiff.txt" append="true" />
+	 </target>
+
+	<target name="signMasterFeature" if="sign">		 		 		 		 
+		<property name="archiveName" value="eclipse-master-${buildId}.zip" />
+		<property name="packtmp" value="${buildDirectory}/packtmp" />
+		<property name="stagingDirectoryOutput" value="/home/data/httpd/download-staging.priv/eclipse/${buildId}-out"/>
+		<property name="stagingDirectory" value="/home/data/httpd/download-staging.priv/eclipse" />
+		<property name="outputFile"  value="${stagingDirectoryOutput}/${archiveName}"/>
+
+		<mkdir dir="${packtmp}" />		 		  
+		<move file="${buildDirectory}/${buildLabel}/${archiveName}" tofile="${packtmp}/${archiveName}"/>
+		<!-- add pack.properties file that specifies effort level -->
+		<exec dir="${eclipse.build.configs}/../../extras" executable="zip">
+			<arg line="-r ${packtmp}/${archiveName} pack.properties" />
+		</exec>
+
+		<!--push drop to staging directory-->
+	 	<echo message="push drop to staging directory"/>
+		<exec dir="${packtmp}" executable="scp" output="signing.txt">
+	  		  <arg line="${archiveName} build.eclipse.org:${stagingDirectory}"/>
+		</exec>
+	 	<exec dir="${buildDirectory}" executable="ssh" output="signing.txt" append="true">
+			<arg line="build.eclipse.org /bin/chmod ugo+rw ${stagingDirectory}/${archiveName} "/>
+		</exec> 
+
+		<!--invoke sign script and wait-->
+	 	<echo message="invoke sign script and wait"/>
+		<exec dir="." executable="ssh" output="signing.txt" append="true">
+	 	  		<arg line="build.eclipse.org &quot;cd ${stagingDirectory}; /usr/bin/sign ${stagingDirectory}/${archiveName} mail ${stagingDirectoryOutput}&quot;"/>
+		</exec>
+		
+		<!--Wait for build to be available -->
+		<antcall target="waitForChangedAttribs">
+               <param name="sshline" value="build.eclipse.org &quot;cd ${stagingDirectoryOutput};ls ${archiveName}&quot;" />
+        </antcall>
+
+		<!--copy zip back to build machine -->
+		<sleep minutes="2"/>
+		<echo message="copy zip back to build machine"/>
+		<exec dir="." executable="scp" output="signing.txt" append="true">
+			<arg line="build.eclipse.org:${stagingDirectory}/${buildId}-out/${archiveName} ${buildDirectory}/${buildLabel}"/>
+        </exec> 
+
+        <!--delete files on build.eclipse.org-->
+		<echo message="delete temp files on build.eclipse.org"/>
+	 	<exec dir="." executable="ssh" output="signing.txt" append="true">
+			<arg line="build.eclipse.org &quot;/bin/rm -rf ${stagingDirectory}/${buildId}-out ${stagingDirectory}/${archiveName}&quot;"/>
+		</exec>
+	</target>		 		 		  		 		  
 
 	<target name="cleanUp">
 		<echo message="** Copying generated zips to drop folder... **" />
@@ -167,15 +254,6 @@
 			<fileset dir="${buildDirectory}/${buildLabel}" />
 		</copy>
 	</target>
-
-	<!-- 
-	<target name="cleanUp">
-		<move todir="${buildDirectory}/.." failonerror="false" overwrite="true">
-        	<fileset dir="${buildDirectory}/${buildLabel}"/>
-		</move>
-		<delete dir="${buildDirectory}"/>
-	</target>
--->
 
 	<target name="test">
 		<property name="test.xml" value="../org.eclipse.releng.basebuilder/plugins/org.eclipse.build.tools/scripts/test.xml" />
@@ -210,6 +288,23 @@
 			<fileset
 				dir="${buildDirectory}/../org.eclipse.modeling.common.releng/staticDropFiles" />
 		</copy>
+	</target>
+
+	<target name="unpackUpdateJarsForPackaging">
+		<property name="tmpsite" value="${buildDirectory}/tmpsite" />
+		<mkdir dir="${tmpsite}/new/eclipse/features" />
+		<mkdir dir="${tmpsite}/new/eclipse/plugins" />
+		<exec executable="unzip" dir="${buildDirectory}/${buildLabel}">
+			<arg line="-q eclipse-master-${buildId}.zip -d ${tmpsite}" />
+		</exec>
+		<unpackUpdateJars site="${tmpsite}/eclipse" output="${tmpsite}/new/eclipse"/>
+		<exec executable="unzip" dir="${buildDirectory}/${buildLabel}">
+			<arg line="-q eclipse-master-${buildId}.zip -d ${tmpsite}" />
+		</exec>
+		<move file="${buildDirectory}/${buildLabel}/eclipse-master-${buildId}.zip" tofile="${buildDirectory}/${buildLabel}/eclipse-master-${buildId}.bak.zip" />
+		<exec executable="zip" dir="${tmpsite}/new">
+			<arg line="-q ${buildDirectory}/${buildLabel}/eclipse-master-${buildId}.zip -r eclipse" />
+		</exec>
 	</target>
 
 </project>

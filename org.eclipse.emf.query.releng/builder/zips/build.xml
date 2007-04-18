@@ -1,0 +1,90 @@
+<project name="Build zips" default="all" basedir=".">
+	<!--
+	<property name="buildDirectory" value="the eclipse dir"/>
+	<property name="buildAlias" value="build alias or id"/>
+	-->
+	<dirname property="antfile.dir" file="${ant.file}" />
+	
+	<property name="outputDir" value="${buildDirectory}/${buildLabel}" />
+	<property name="pluginsDir" value="${buildDirectory}/plugins" />
+	<property name="rootDir" value="${subprojectName}" />
+	<property name="projectName" value="emf" />
+	<property name="unpackdir" value="${buildDirectory}/${buildLabel}/master-unpack"/>
+		
+	<target name="all">
+		
+		<echo>
+			buildDirectory = ${buildDirectory}
+			buildLabel = ${buildLabel}
+			outputDir = ${outputDir}
+			projectName = ${projectName}
+			subprojectName = ${subprojectName}
+			buildAlias = ${buildAlias}
+			unpackdir = ${unpackdir}
+		</echo>
+		
+		<antcall target="unpackMasterFeature" />
+		
+		<!-- SDK: all but test -->
+		<fileset id="fileset.sdk" dir="${unpackdir}">
+			<exclude name="**/*.test*"/>
+			<exclude name="**/*.test*/**"/>
+		</fileset>
+		<antcall target="packZip">
+			<param name="zipname" value="${outputDir}/${projectName}-${subprojectName}-SDK-${buildAlias}.zip"/>
+			<param name="fileset" value="fileset.sdk"/>
+		</antcall>
+		
+		<!-- runtime: no doc, example, source or test -->
+		<fileset id="fileset.runtime" dir="${unpackdir}">
+			<exclude name="**/*.doc*"/>
+			<exclude name="**/*.doc*/**"/>
+			<exclude name="**/*.example*"/>
+			<exclude name="**/*.example*/**"/>
+			<exclude name="**/org.eclipse.*.source*"/>
+			<exclude name="**/org.eclipse.*.source*/**"/>
+			<exclude name="**/*src.zip"/>
+			<exclude name="**/*.test*"/>
+			<exclude name="**/*.test*/**"/>
+		</fileset>
+		<antcall target="packZip">
+			<param name="zipname" value="${outputDir}/${projectName}-${subprojectName}-runtime-${buildAlias}.zip"/>
+			<param name="fileset" value="fileset.runtime"/>
+		</antcall>
+		
+		<!-- tests: just tests (and their source) -->
+		<fileset id="fileset.tests" dir="${unpackdir}">
+			<include name="**/*.test*"/>
+			<include name="**/*.test*/**"/>
+		</fileset>
+		<antcall target="packZip">
+			<param name="zipname" value="${outputDir}/${projectName}-${subprojectName}-automated-tests-${buildAlias}.zip"/>
+			<param name="fileset" value="fileset.tests"/>
+		</antcall>
+		
+		<!-- examples -->
+		<fileset id="fileset.examples" dir="${unpackdir}">
+			<include name="**/*.example*"/>
+			<include name="**/*.example*/**"/>
+		</fileset>
+		<antcall target="packZip">
+			<param name="zipname" value="${outputDir}/${projectName}-${subprojectName}-examples-${buildAlias}.zip"/>
+			<param name="fileset" value="fileset.examples"/>
+		</antcall>
+				
+		<!-- standalone, if applicable: a subset of the runtime zip -->
+		<!-- ... -->
+		
+	</target>
+	
+	<target name="unpackMasterFeature">
+		<unzip dest="${unpackdir}" 
+			src="${buildDirectory}/${buildLabel}/${projectName}-${subprojectName}-master-${buildAlias}.zip"/>
+	</target>
+	
+	<target name="packZip">
+		<echo message="Pack ${zipname}..."/>
+		<zip destfile="${zipname}"><fileset refid="${fileset}"/></zip>
+	</target>
+	
+</project>
