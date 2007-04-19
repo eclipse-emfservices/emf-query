@@ -42,7 +42,7 @@
 		<antcall target="create.label.properties" />
 		<property file="${buildDirectory}/label.properties" />
 		
-		<echo message="buildMasterFeature.xml properties:"/>
+		<echo message="buildAll.xml properties:"/>
 		<echo message="basedir = ${basedir}"/>
 
 		<!-- load a value for ${subprojectName} -->
