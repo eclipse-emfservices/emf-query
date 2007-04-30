@@ -9,7 +9,7 @@
 	<property name="pluginsDir" value="${buildDirectory}/plugins" />
 	<property name="rootDir" value="${subprojectName}" />
 	<property name="projectName" value="emf" />
-	<property name="unpackdir" value="${buildDirectory}/${buildLabel}/master-unpack"/>
+	<property name="unpackdir" value="${buildDirectory}/${buildLabel}/masterfeature-unpack"/>
 		
 	<target name="all">
 		
@@ -79,7 +79,7 @@
 	
 	<target name="unpackMasterFeature">
 		<unzip dest="${unpackdir}" 
-			src="${buildDirectory}/${buildLabel}/${projectName}-${subprojectName}-master-${buildAlias}.zip"/>
+			src="${buildDirectory}/${buildLabel}/${projectName}-${subprojectName}-masterfeature-${buildAlias}.zip"/>
 	</target>
 	
 	<target name="packZip">

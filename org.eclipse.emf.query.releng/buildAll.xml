@@ -4,8 +4,8 @@
 		Steps
 		
 		1.  Build master feature which includes all features and plug-ins.
-		2.  Sign master zip.
-		3.  Repackage signed master.zip into distributables.  Start tests as soon as plug-ins are packaged.
+		2.  Sign masterfeature zip.
+		3.  Repackage signed masterfeature zip into distributables.  Start tests as soon as plug-ins are packaged.
 		4.  Publish test results. 
 	
 	 	Ant properties available at runtime: 
@@ -117,7 +117,7 @@
 
 	<target name="buildMasterFeature">
 		<ant antfile="build.xml" target="main">
-			<property name="component" value="builder/master" />
+			<property name="component" value="builder/masterfeature" />
 		</ant>
 	</target>
 
@@ -135,7 +135,7 @@
 	</target>
 
 	<target name="packMasterFeature" unless="skipPack">
-		<property name="archiveName" value="eclipse-master-${buildId}.zip" />
+		<property name="archiveName" value="emf-${subprojectName}-masterfeature-${buildId}.zip" />
 		<property name="packtmp" value="${buildDirectory}/packtmp" />
 		<mkdir dir="${packtmp}" />	
 		<move file="${buildDirectory}/${buildLabel}/${archiveName}" tofile="${packtmp}/${archiveName}"/>
@@ -201,7 +201,7 @@
 	 </target>
 
 	<target name="signMasterFeature" if="sign">		 		 		 		 
-		<property name="archiveName" value="eclipse-master-${buildId}.zip" />
+		<property name="archiveName" value="emf-${subprojectName}-masterfeature-${buildId}.zip" />
 		<property name="packtmp" value="${buildDirectory}/packtmp" />
 		<property name="stagingDirectoryOutput" value="/home/data/httpd/download-staging.priv/eclipse/${buildId}-out"/>
 		<property name="stagingDirectory" value="/home/data/httpd/download-staging.priv/eclipse" />
@@ -295,15 +295,15 @@
 		<mkdir dir="${tmpsite}/new/eclipse/features" />
 		<mkdir dir="${tmpsite}/new/eclipse/plugins" />
 		<exec executable="unzip" dir="${buildDirectory}/${buildLabel}">
-			<arg line="-q eclipse-master-${buildId}.zip -d ${tmpsite}" />
+			<arg line="-q emf-${subprojectName}-masterfeature-${buildId}.zip -d ${tmpsite}" />
 		</exec>
 		<unpackUpdateJars site="${tmpsite}/eclipse" output="${tmpsite}/new/eclipse"/>
 		<exec executable="unzip" dir="${buildDirectory}/${buildLabel}">
-			<arg line="-q eclipse-master-${buildId}.zip -d ${tmpsite}" />
+			<arg line="-q emf-${subprojectName}-masterfeature-${buildId}.zip -d ${tmpsite}" />
 		</exec>
-		<move file="${buildDirectory}/${buildLabel}/eclipse-master-${buildId}.zip" tofile="${buildDirectory}/${buildLabel}/eclipse-master-${buildId}.bak.zip" />
+		<move file="${buildDirectory}/${buildLabel}/emf-${subprojectName}-masterfeature-${buildId}.zip" tofile="${buildDirectory}/${buildLabel}/emf-${subprojectName}-masterfeature-${buildId}.bak.zip" />
 		<exec executable="zip" dir="${tmpsite}/new">
-			<arg line="-q ${buildDirectory}/${buildLabel}/eclipse-master-${buildId}.zip -r eclipse" />
+			<arg line="-q ${buildDirectory}/${buildLabel}/emf-${subprojectName}-masterfeature-${buildId}.zip -r eclipse" />
 		</exec>
 	</target>
 
