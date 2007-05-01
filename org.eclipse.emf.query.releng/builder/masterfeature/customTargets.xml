@@ -8,21 +8,20 @@
 	<target name="allElements">
 		<ant antfile="${genericTargets}" target="${target}">
 			<property name="type" value="feature" />
-			<property name="id" value="org.eclipse.emf.query.masterfeature"/>
+			<property name="id" value="org.eclipse.emf.${subprojectName}.masterfeature"/>
 		</ant>
 	</target>
 
     <!-- ===================================================================== -->
     <!-- Targets to assemble the built elements for particular configurations  -->
     <!-- ===================================================================== -->
-    <target name="assemble.masterfeature.group.group.group">
-            <!-- workaround for Bug 127747 Grouped config build failing on missing group.group.group folder-->
-            <mkdir dir="${buildDirectory}/tmp/eclipse/group.group.group/eclipse"/>
-            <antcall target="assemble" />
-    </target>
 	
-	<target name="assemble">
+	<target name="assemble.org.eclipse.emf.query.masterfeature">
+        <!-- workaround for Bug 127747 Grouped config build failing on missing group.group.group folder-->
+        <mkdir dir="${buildDirectory}/tmp/eclipse/group.group.group/eclipse"/>
+        <antcall target="assemble" />
 		<ant antfile="${assembleScriptName}" />
+		<!-- ADD POST STEPS -->
 	</target>
 
 	<!-- ===================================================================== -->
@@ -30,7 +29,6 @@
 	<!-- Replace values for cvsRoot, package and mapVersionTag as desired. -->
 	<!-- ===================================================================== -->
 	<target name="checkLocal">
-		<echo message="Checking if ${buildDirectory}/maps exists..."/>
 		<available property="mapsLocal" file="${buildDirectory}/maps" />
 	</target>
 
@@ -146,12 +144,6 @@
 	<!-- Steps to do before generating build scripts -->
 	<!-- ===================================================================== -->
 	<target name="preGenerate">
-        <!--need to delete generated source features and plug-ins due to bug
-          https://bugs.eclipse.org/bugs/show_bug.cgi?id=128139 -->
-          <delete>
-                  <fileset dir="${buildDirectory}/features" includes="*.source*/**" />
-                  <fileset dir="${buildDirectory}/plugins" includes="*.source*/**" />
-          </delete>
 	</target>
 
 	<!-- ===================================================================== -->
