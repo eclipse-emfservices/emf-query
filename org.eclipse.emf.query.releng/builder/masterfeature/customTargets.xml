@@ -154,8 +154,6 @@
 	<target name="postProcess">
 		
 		<!-- We now delete all of these special example projects and return to normal -->
-		<delete dir="${buildDirectory}/plugins/org.eclipse.emf.query.examples.statements"/>
-		<delete dir="${buildDirectory}/plugins/org.eclipse.emf.query.examples.ocl"/>
 		<delete dir="${buildDirectory}/plugins/org.eclipse.emf.examples.library"/>
 		<delete dir="${buildDirectory}/plugins/org.eclipse.emf.examples.library.edit"/>
 		<delete dir="${buildDirectory}/plugins/org.eclipse.emf.examples.library.editor"/>
