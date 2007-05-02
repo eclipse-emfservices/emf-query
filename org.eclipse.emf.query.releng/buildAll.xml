@@ -21,6 +21,9 @@
 		<echo message="Set compilerArgs = '-enableJavadoc -encoding ISO-8859-1 -warn:-serial,nls,unchecked'"/>
 		<property name="compilerArg" value="-enableJavadoc -encoding ISO-8859-1 -warn:-serial,nls,unchecked" />
 		
+		<property name="sign" value="false"/>
+		<property name="skipPack" value="true"/>
+		
 		<path id="bc">
 			<fileset dir="${java.home}/lib">
 				<include name="*.jar" />
