@@ -223,21 +223,18 @@
 
 	<!--load the property file created with the directory names for all test plugins-->
 	<property file="${workingDirectory}/testing/test.properties" />
-	
-	<echo message="org.eclipse.test = ${org.eclipse.test}"/>
-	<echoproperties></echoproperties>
-	<echo message="-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"/>
-	
+
 	<!-- Remove the plugin version number appended to the org.eclipse.test plugin directory.
    	     This is so that contributors of test.xml's do not have to update their paths to 
    	     library.xml in org.eclipse.test whenever its version is updated.
    	 -->
-   	<move todir="${workingDirectory}/eclipse/plugins/org.eclipse.test">
-    		<fileset dir="${workingDirectory}/eclipse/plugins/${org.eclipse.test}" />
-  	</move>
-  	
+	<move todir="${workingDirectory}/eclipse/plugins/" includeEmptyDirs="yes" failonerror="true">
+		<fileset includes="**/org.eclipse.test*/**" dir="${workingDirectory}/eclipse/plugins/" />
+		<mapper type="glob" from="org.eclipse.test*" to="org.eclipse.test"/>
+	</move>		
+
   	<!--the Ant move task leaves behind an empty directory-->
-  	<delete dir="${workingDirectory}/eclipse/plugins/${org.eclipse.test}" includeEmptyDirs="true" />
+  	<delete dir="${workingDirectory}/eclipse/plugins/" excludes="org.eclipse.test,org.eclipse.test/**" includes="org.eclipse.test*,org.eclipse.test*/**" includeEmptyDirs="true" />
 	
  	<!-- rezip the JUnit plugin tests -->
 	<zip destfile="${workingDirectory}/testing/emf-${subprojectName}-junit-tests-${buildAlias}.zip">
