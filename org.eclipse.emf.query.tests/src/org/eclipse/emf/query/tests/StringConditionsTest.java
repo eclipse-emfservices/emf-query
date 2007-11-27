@@ -1,7 +1,7 @@
 /**
  * <copyright>
  *
- * Copyright (c) 2006 IBM Corporation and others.
+ * Copyright (c) 2006, 2007 IBM Corporation and others.
  * All rights reserved.   This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,16 +12,16 @@
  *
  * </copyright>
  *
- * $Id: StringConditionsTest.java,v 1.1 2006/01/23 17:27:23 cdamus Exp $
+ * $Id: StringConditionsTest.java,v 1.1.6.1 2007/11/27 19:35:48 cdamus Exp $
  */
 
 package org.eclipse.emf.query.tests;
 
+import junit.framework.TestCase;
+
 import org.eclipse.emf.query.conditions.strings.StringCondition;
 import org.eclipse.emf.query.conditions.strings.StringValue;
 import org.eclipse.emf.query.conditions.strings.SubStringValue;
-
-import junit.framework.TestCase;
 
 /**
  * JUnit tests for {@link StringCondition} subclasses, to test the adoption of
@@ -85,6 +85,29 @@ public class StringConditionsTest extends TestCase {
 		
 		assertNotSubstring("cda", test, false); //$NON-NLS-1$
 		assertNotSubstring("cDa", test, false); //$NON-NLS-1$
+	}
+
+	/**
+	 * Tests that evaluating a pattern against an empty string or null just returns false.
+	 */
+	public void test_emptyString_substringValue_211055() {
+		final String test = ""; //$NON-NLS-1$
+
+		assertSubstring(null, null, false);
+		assertSubstring("", test, false); //$NON-NLS-1$
+		
+		assertNotSubstring("", null, false); //$NON-NLS-1$
+		assertNotSubstring("a", test, false); //$NON-NLS-1$
+
+		Throwable throwable = null;
+		try {
+			assertSubstring(null, test, false);
+		}
+		catch (Exception t)
+		{
+		  throwable = t;
+		}
+		assertTrue(throwable instanceof NullPointerException);
 	}
 	
 	//

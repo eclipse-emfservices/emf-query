@@ -1,7 +1,7 @@
 /**
  * <copyright>
  *
- * Copyright (c) 2002, 2006 IBM Corporation and others.
+ * Copyright (c) 2002, 2007 IBM Corporation and others.
  * All rights reserved.   This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -102,7 +102,18 @@ public class SubStringValue
 	 * @see org.eclipse.emf.query.conditions.strings.StringCondition#isSatisfied(java.lang.String)
 	 */
 	public boolean isSatisfied(String str) {
-		StringSearch search = new StringSearch(getString(), str);
+		String theString = getString();
+		if (str == null) {
+			return theString == null;
+		}
+		if (theString.length() == 0) {
+			return true;
+		} else if (str.length() == 0) {
+			return false;
+		}
+
+		// StringSearch can only handle non-empty strings as pattern and target
+        StringSearch search = new StringSearch(theString, str);
 		
 		if (!isCaseSensitive()) {
 			search.setCollator(CASE_INSENSITIVE_COLLATOR);
