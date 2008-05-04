@@ -9,6 +9,8 @@ fragment@org.eclipse.ant.optional.junit=v20030401,:pserver:anonymous@dev.eclipse
 
 !*** plugins, features and fragments
 
+feature@org.eclipse.emf.query.master=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query.master-feature
+
 feature@org.eclipse.emf.query.sdk=v200805041333,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query.sdk-feature
 feature@org.eclipse.emf.query=v200805041333,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query-feature
 feature@org.eclipse.emf.query.ocl=v200805041333,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query.ocl-feature
