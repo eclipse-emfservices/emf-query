@@ -133,6 +133,8 @@ propertyName=propertyValue
 	    <zip destfile="${buildDirectory}/${buildLabel}/${projectName}-${subprojectName}-runtime-${buildAlias}.zip" update="true">
 	      <zipfileset src="${buildDirectory}/${buildLabel}/${SDKZip}" dirmode="775" filemode="664" id="runtimeFiles" excludes="**/org.eclipse.*.example*, **/org.eclipse.*.example*/**, **/org.eclipse.*.sdk*, **/org.eclipse.*.sdk*/**, **/org.eclipse.*.doc*, **/org.eclipse.*.doc*/*, **/org.eclipse.*.source*, **/org.eclipse.*.source*/**, **/*src.zip">
 	        <include name="**/org.eclipse.emf.query_*" />
+	        <include name="**/org.eclipse.emf.query_*/**" />
+	        <include name="**/org.eclipse.emf.query.ocl_*" />
 	        <include name="**/org.eclipse.emf.query.ocl_*/**" />
 	      </zipfileset>
 	      <zipfileset refid="rootfiles" />
