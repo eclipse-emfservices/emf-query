@@ -107,7 +107,9 @@ propertyName=propertyValue
 	    <parallel failonany="true">
 	      <sequential>
 	        <ant target="addFeatureAndPluginJarsToMasterZip" antfile="${helper}" />
-	        <ant target="signMasterZip" antfile="${helper}" />
+			<ant target="signMasterZip" antfile="${helper}">
+				<property name="mailStatus" value="nomail" />
+			</ant>
 	        <ant target="packMasterZip" antfile="${helper}" />
 	      </sequential>
 	    </parallel>
