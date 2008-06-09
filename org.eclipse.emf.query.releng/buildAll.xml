@@ -142,7 +142,6 @@ propertyName=propertyValue
 		</zip>
 		<move file="${buildDirectory}/${buildLabel}/${masterZip}.tmp" tofile="${buildDirectory}/${buildLabel}/${masterZip}" overwrite="true" />
 
-
 		<echo-timestamp />
 
 		<!-- ${allZip} is no longer needed, and we don't publish it -->
