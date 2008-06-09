@@ -10,7 +10,6 @@
 
 	    <property name="commonScriptsDir" value="${basedir}/../org.eclipse.modeling.common.releng/scripts" />
 		
-	    <!-- TODO: set correct source and target levels here -->
 		<path id="bc">
 			<fileset dir="${java.home}/lib">
 				<include name="*.jar" />
@@ -64,12 +63,23 @@ propertyName=propertyValue
 
 	    <!-- required for signing & repackaging master zip into smaller zips -->
 	    <property name="masterZip" value="${projectName}-${subprojectName}-Master-${buildAlias}.zip" />
+	    <property name="allZip" value="${projectName}-${subprojectName}-ALL-${buildAlias}.zip" />
+	    <property name="SDKZip" value="${projectName}-${subprojectName}-SDK-${buildAlias}.zip" />
+	    <property name="examplesZip" value="${projectName}-${subprojectName}-examples-${buildAlias}.zip" />
 	    <property name="java15-home" value="/opt/sun-java2-5.0" />
 	    <property name="stagingHome" value="/home/data/httpd/download-staging.priv" />
 	    <property name="projectPath" value="modeling/emf" />
 	    <!-- user with write perms in staging dir & permission to run /usr/bin/sign -->
 	    <property name="buildServerUser" value="nickb@build.eclipse.org" />
-	    <property name="sign" value="true" />
+		<condition property="sign">
+			<or>
+				<!-- want to enable/disable signing for a given build type? add/remove types here -->
+				<equals arg1="${buildType}" arg2="I" />
+				<equals arg1="${buildType}" arg2="M" />
+				<equals arg1="${buildType}" arg2="S" />
+				<equals arg1="${buildType}" arg2="R" />
+			</or>
+		</condition>
 	</target>
 
 	  <target name="buildAll">
@@ -85,53 +95,31 @@ propertyName=propertyValue
 	    </ant>
 
 	    <echo-timestamp />
-	    <parallel failonany="true">
-	      <sequential>
-	        <ant target="addFeatureAndPluginJarsToMasterZip" antfile="${helper}" />
-			<ant target="signMasterZip" antfile="${helper}">
-				<property name="mailStatus" value="nomail" />
-			</ant>
-	        <ant target="packMasterZip" antfile="${helper}" />
-	      </sequential>
-	    </parallel>
+		<ant target="signMasterZip" antfile="${helper}">
+			<property name="mailStatus" value="nomail" />
+		</ant>
 
 		<!-- Unpack jars to produce SDK zip with mix of folders & jars -->
 		<ant target="unpackUpdateJarsAndRepack" antfile="${helper}">
 			<property name="sourceZip" value="${buildDirectory}/${buildLabel}/${masterZip}" />
-			<property name="targetZip" value="${buildDirectory}/${buildLabel}/${masterZip}.tmp" />
+			<property name="targetZip" value="${buildDirectory}/${buildLabel}/${allZip}" />
 		</ant>
-	    <move file="${buildDirectory}/${buildLabel}/${masterZip}.tmp"
-	    	tofile="${buildDirectory}/${buildLabel}/${masterZip}"
-	    	overwrite="true" />
 
-	    <!-- SDK -->
-	    <property name="SDKZip" value="${projectName}-${subprojectName}-SDK-${buildAlias}.zip" />
+		<!-- remove rootfiles -->
+		<ant target="removeRootFilesFromMaster" antfile="${helper}" />
+
+		<!-- pack the master zip -->
+		<ant target="packMasterZip" antfile="${helper}" />
+
+		<echo-timestamp />
+
+	    <!-- build SDK -->
 	    <zip destfile="${buildDirectory}/${buildLabel}/${SDKZip}" update="true">
-	      <zipfileset src="${buildDirectory}/${buildLabel}/${masterZip}" dirmode="775" filemode="664" id="SDKZipFiles" excludes="**/org.eclipse.*.example*, **/org.eclipse.*.example*/**, **/org.eclipse.*.master_*, **/org.eclipse.*.master_*/**, **/*.pack.gz, **/pack.properties, **/features/*.jar, **/plugins/*.source_*.jar" />
-	      <zipfileset src="${buildDirectory}/${buildLabel}/${masterZip}" dirmode="775" filemode="664" id="SDKZipFiles2" includes="**/plugins/org.eclipse.emf.query.examples_*.jar" />
+	      <zipfileset src="${buildDirectory}/${buildLabel}/${allZip}" dirmode="775" filemode="664" id="SDKZipFiles" excludes="**/org.eclipse.*.example*, **/org.eclipse.*.example*/**, **/org.eclipse.*.master_*, **/org.eclipse.*.master_*/**, **/*.pack.gz, **/pack.properties, **/features/*.jar, **/plugins/*.source_*.jar" />
+	      <zipfileset src="${buildDirectory}/${buildLabel}/${allZip}" dirmode="775" filemode="664" id="SDKZipFiles2" includes="**/plugins/org.eclipse.emf.query.examples_*.jar" />
 	    </zip>
 
-	    <!-- examples -->
-	    <property name="examplesZip" value="${projectName}-${subprojectName}-examples-${buildAlias}.zip" />
-	    <zip destfile="${buildDirectory}/${buildLabel}/${examplesZip}" update="true">
-	      <zipfileset src="${buildDirectory}/${buildLabel}/${masterZip}" dirmode="775" filemode="664" id="examplesZipFiles" includes="**/org.eclipse.*.example*, **/org.eclipse.*.example*/**" excludes="**/org.eclipse.*.master_*, **/org.eclipse.*.master_*/**, **/*.pack.gz, **/pack.properties, **/features/*.jar, **/plugins/*.source_*.jar" />
-	      <zipfileset src="${buildDirectory}/${buildLabel}/${SDKZip}" dirmode="775" filemode="664" id="rootfiles" includes="**/eclipse/epl-v10.html, **/eclipse/notice.html" />
-	    </zip>
-
-	  	<!-- tests -->
-	    <ant antfile="build.xml" target="main">
-	      <property name="component" value="builder/tests" />
-	    </ant>
-
-	    <ant target="removeFeatureAndPluginFoldersFromMasterZip" antfile="${helper}" />
-
-	    <!-- remove .master features -->
-	    <zip destfile="${buildDirectory}/${buildLabel}/${masterZip}.tmp" update="true">
-	      <zipfileset src="${buildDirectory}/${buildLabel}/${masterZip}" dirmode="775" filemode="664" excludes="**/*emf.query.master_*, **/*emf.query.master_*/**" />
-	    </zip>
-	    <move file="${buildDirectory}/${buildLabel}/${masterZip}.tmp" tofile="${buildDirectory}/${buildLabel}/${masterZip}" overwrite="true" />
-
-	    <!-- runtime -->
+	    <!-- build runtime -->
 	    <zip destfile="${buildDirectory}/${buildLabel}/${projectName}-${subprojectName}-runtime-${buildAlias}.zip" update="true">
 	      <zipfileset src="${buildDirectory}/${buildLabel}/${SDKZip}" dirmode="775" filemode="664" id="runtimeFiles" excludes="**/org.eclipse.*.example*, **/org.eclipse.*.example*/**, **/org.eclipse.*.sdk*, **/org.eclipse.*.sdk*/**, **/org.eclipse.*.doc*, **/org.eclipse.*.doc*/*, **/org.eclipse.*.source*, **/org.eclipse.*.source*/**, **/*src.zip">
 	        <include name="**/org.eclipse.emf.query_*" />
@@ -139,10 +127,31 @@ propertyName=propertyValue
 	        <include name="**/org.eclipse.emf.query.ocl_*" />
 	        <include name="**/org.eclipse.emf.query.ocl_*/**" />
 	      </zipfileset>
+	      <zipfileset src="${buildDirectory}/${buildLabel}/${SDKZip}" dirmode="775" filemode="664" id="rootfiles" includes="**/eclipse/epl-v10.html, **/eclipse/notice.html" />
+	    </zip>
+
+	    <!-- build examples -->
+	    <zip destfile="${buildDirectory}/${buildLabel}/${examplesZip}" update="true">
+	      <zipfileset src="${buildDirectory}/${buildLabel}/${allZip}" dirmode="775" filemode="664" id="examplesZipFiles" includes="**/org.eclipse.*.example*, **/org.eclipse.*.example*/**" excludes="**/org.eclipse.*.master_*, **/org.eclipse.*.master_*/**, **/*.pack.gz, **/pack.properties, **/features/*.jar, **/plugins/*.source_*.jar" />
 	      <zipfileset refid="rootfiles" />
 	    </zip>
 
+	    <!-- remove .master features from Master zip as they're not required on the update site -->
+	    <zip destfile="${buildDirectory}/${buildLabel}/${masterZip}.tmp" update="true">
+	      <zipfileset src="${buildDirectory}/${buildLabel}/${masterZip}" dirmode="775" filemode="664" excludes="**/*emf.query.master_*, **/*emf.query.master_*/**" />
+	    </zip>
+	    <move file="${buildDirectory}/${buildLabel}/${masterZip}.tmp" tofile="${buildDirectory}/${buildLabel}/${masterZip}" overwrite="true" />
+
+
 	    <echo-timestamp />
+
+		<!-- ${allZip} is no longer needed, and we don't publish it -->
+		<delete file="${buildDirectory}/${buildLabel}/${allZip}" failonerror="true" quiet="true" />
+
+		<ant antfile="build.xml" target="main">
+			<property name="component" value="builder/tests" />
+		</ant>
+		<echo-timestamp />
 	    <ant target="generateDigests" antfile="${helper}" />
 
 	  </target>
