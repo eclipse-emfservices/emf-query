@@ -115,30 +115,69 @@ propertyName=propertyValue
 
 		<!-- build SDK -->
 		<zip destfile="${buildDirectory}/${buildLabel}/${SDKZip}" update="true">
-			<zipfileset src="${buildDirectory}/${buildLabel}/${allZip}" dirmode="775" filemode="664" id="SDKZipFiles" excludes="**/org.eclipse.*.example*, **/org.eclipse.*.example*/**, **/org.eclipse.*.master_*, **/org.eclipse.*.master_*/**, **/*.pack.gz, **/pack.properties, **/features/*.jar, **/plugins/*.source_*.jar" />
-			<zipfileset src="${buildDirectory}/${buildLabel}/${allZip}" dirmode="775" filemode="664" id="SDKZipFiles2" includes="**/plugins/org.eclipse.emf.query.examples_*.jar" />
+			<zipfileset src="${buildDirectory}/${buildLabel}/${allZip}" 
+				    dirmode="775" filemode="664"
+				    id="SDKZipFiles"
+				    excludes="**/*.pack.gz,
+                              **/pack.properties,
+                              **/features/*.jar,
+                              **/org.eclipse.*.example*,
+				              **/org.eclipse.*.example*/**,
+	                          **/org.eclipse.*.master_*,
+				              **/org.eclipse.*.master_*/**,
+				              **/plugins/*.source_*.jar"/>
+			<zipfileset src="${buildDirectory}/${buildLabel}/${allZip}"
+				    dirmode="775" filemode="664"
+				    id="SDKZipFiles2"
+			        includes="**/plugins/org.eclipse.emf.query.examples_*.jar,
+				              **/plugins/org.eclipse.emf.query*.source_*.jar"
+			        excludes="**/plugins/org.eclipse.emf.query.example*.source_*.jar" />
 		</zip>
 
 		<!-- build runtime -->
 		<zip destfile="${buildDirectory}/${buildLabel}/${projectName}-${subprojectName}-runtime-${buildAlias}.zip" update="true">
-			<zipfileset src="${buildDirectory}/${buildLabel}/${SDKZip}" dirmode="775" filemode="664" id="runtimeFiles" excludes="**/org.eclipse.*.example*, **/org.eclipse.*.example*/**, **/org.eclipse.*.sdk*, **/org.eclipse.*.sdk*/**, **/org.eclipse.*.doc*, **/org.eclipse.*.doc*/*, **/org.eclipse.*.source*, **/org.eclipse.*.source*/**, **/*src.zip">
-				<include name="**/org.eclipse.emf.query_*" />
-				<include name="**/org.eclipse.emf.query_*/**" />
-				<include name="**/org.eclipse.emf.query.ocl_*" />
-				<include name="**/org.eclipse.emf.query.ocl_*/**" />
-			</zipfileset>
-			<zipfileset src="${buildDirectory}/${buildLabel}/${SDKZip}" dirmode="775" filemode="664" id="rootfiles" includes="**/eclipse/epl-v10.html, **/eclipse/notice.html" />
+			<zipfileset src="${buildDirectory}/${buildLabel}/${SDKZip}"
+				    dirmode="775" filemode="664"
+				    id="runtimeFiles"
+				    excludes="**/org.eclipse.*.example*,
+				              **/org.eclipse.*.example*/**,
+				              **/org.eclipse.*.sdk*,
+				              **/org.eclipse.*.sdk*/**,
+				              **/org.eclipse.*.doc*,
+				              **/org.eclipse.*.doc*/*,
+				              **/org.eclipse.*.source*,
+				              **/org.eclipse.*.source*/**,
+				              **/*src.zip"
+				    includes="**/org.eclipse.emf.query_*,
+				              **/org.eclipse.emf.query_*/**,
+				              **/org.eclipse.emf.query.ocl_*,
+				              **/org.eclipse.emf.query.ocl_*/**" />
+			<zipfileset src="${buildDirectory}/${buildLabel}/${SDKZip}"
+			        dirmode="775" filemode="664"
+			        id="rootfiles"
+			        includes="**/eclipse/epl-v10.html
+				              **/eclipse/notice.html" />
 		</zip>
 
 		<!-- build examples -->
 		<zip destfile="${buildDirectory}/${buildLabel}/${examplesZip}" update="true">
-			<zipfileset src="${buildDirectory}/${buildLabel}/${allZip}" dirmode="775" filemode="664" id="examplesZipFiles" includes="**/org.eclipse.*.example*, **/org.eclipse.*.example*/**" excludes="**/org.eclipse.*.master_*, **/org.eclipse.*.master_*/**, **/*.pack.gz, **/pack.properties, **/features/*.jar, **/plugins/*.source_*.jar" />
+			<zipfileset src="${buildDirectory}/${buildLabel}/${allZip}"
+				    dirmode="775" filemode="664"
+				    id="examplesZipFiles"
+				    excludes="**/*.pack.gz,
+                              **/pack.properties,
+                              **/features/*.jar"
+                    includes="**/org.eclipse.*.example*,
+                              **/org.eclipse.*.example*/**" />
 			<zipfileset refid="rootfiles" />
 		</zip>
 
 		<!-- remove .master features from Master zip as they're not required on the update site -->
 		<zip destfile="${buildDirectory}/${buildLabel}/${masterZip}.tmp" update="true">
-			<zipfileset src="${buildDirectory}/${buildLabel}/${masterZip}" dirmode="775" filemode="664" excludes="**/*emf.query.master_*, **/*emf.query.master_*/**" />
+			<zipfileset src="${buildDirectory}/${buildLabel}/${masterZip}"
+				    dirmode="775" filemode="664"
+				    excludes="**/*emf.query.master_*,
+				              **/*emf.query.master_*/**" />
 		</zip>
 		<move file="${buildDirectory}/${buildLabel}/${masterZip}.tmp" tofile="${buildDirectory}/${buildLabel}/${masterZip}" overwrite="true" />
 
