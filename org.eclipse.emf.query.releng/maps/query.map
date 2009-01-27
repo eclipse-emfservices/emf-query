@@ -11,20 +11,20 @@ fragment@org.eclipse.ant.optional.junit=v20030401,:pserver:anonymous@dev.eclipse
 
 feature@org.eclipse.emf.query.master=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query.master-feature
 
-feature@org.eclipse.emf.query.sdk=v200805130238,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query.sdk-feature
-feature@org.eclipse.emf.query=v200805130238,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query-feature
-feature@org.eclipse.emf.query.ocl=v200805130238,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query.ocl-feature
-feature@org.eclipse.emf.query.doc=v200805130238,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/doc/org.eclipse.emf.query.doc-feature
-feature@org.eclipse.emf.query.examples=v200805130238,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/examples/org.eclipse.emf.query.examples-feature
-feature@org.eclipse.emf.query.tests=v200805130238,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/tests/org.eclipse.emf.query.tests-feature
+feature@org.eclipse.emf.query.sdk=v200901271543,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query.sdk-feature
+feature@org.eclipse.emf.query=v200901271543,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query-feature
+feature@org.eclipse.emf.query.ocl=v200901271543,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query.ocl-feature
+feature@org.eclipse.emf.query.doc=v200901271543,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/doc/org.eclipse.emf.query.doc-feature
+feature@org.eclipse.emf.query.examples=v200901271543,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/examples/org.eclipse.emf.query.examples-feature
+feature@org.eclipse.emf.query.tests=v200901271543,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/tests/org.eclipse.emf.query.tests-feature
 
-plugin@org.eclipse.emf.query=v200805130238,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query
-plugin@org.eclipse.emf.query.ocl=v200805130238,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query.ocl
-plugin@org.eclipse.emf.query.doc=v200805130238,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/doc/org.eclipse.emf.query.doc
-plugin@org.eclipse.emf.query.examples=v200805130238,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/examples/org.eclipse.emf.query.examples
+plugin@org.eclipse.emf.query=v200901271543,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query
+plugin@org.eclipse.emf.query.ocl=v200901271543,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query.ocl
+plugin@org.eclipse.emf.query.doc=v200901271543,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/doc/org.eclipse.emf.query.doc
+plugin@org.eclipse.emf.query.examples=v200901271543,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/examples/org.eclipse.emf.query.examples
 plugin@org.eclipse.emf.query.examples.statements=v200805130238,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/examples/org.eclipse.emf.query.examples.statements
 plugin@org.eclipse.emf.query.examples.ocl=v200805130238,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/examples/org.eclipse.emf.query.examples.ocl
-plugin@org.eclipse.emf.query.tests=v200805130238,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/tests/org.eclipse.emf.query.tests
+plugin@org.eclipse.emf.query.tests=v200901271543,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/tests/org.eclipse.emf.query.tests
 plugin@org.eclipse.emf.query.ocl.tests=v200805130238,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/tests/org.eclipse.emf.query.ocl.tests
 
 !*** EMF Examples plugins
