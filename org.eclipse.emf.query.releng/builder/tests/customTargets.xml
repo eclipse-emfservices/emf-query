@@ -38,8 +38,7 @@
 	<property name="mapVersionTag" value="HEAD" />
 	<property name="packagePath" value="org.eclipse.${projectName}/org.eclipse.emf.${subprojectName}.releng/maps"/>
 
-	<cvs cvsRsh="ssh" cvsRoot="${mapCvsRoot}" tag="${mapVersionTag}" 
-		package="${packagePath}" dest="${buildDirectory}/maps" />
+		<cvs cvsRsh="ssh" cvsRoot="${mapCvsRoot}" tag="${mapVersionTag}" package="${packagePath}" dest="${buildDirectory}/maps" />
 	<copy todir="${buildDirectory}/maps/CVS" overwrite="true">
 		<fileset dir="${buildDirectory}/maps/${packagePath}/CVS" />
 	</copy>
@@ -200,9 +199,11 @@
 	<echo message="workingDirectory:  ${workingDirectory}"/>
 
 	<!--unzip the junit tests-->
-    <mkdir dir="${workingDirectory}/eclipse" />
-	<unzip dest="${workingDirectory}" overwrite="true">
-		<fileset dir="${buildDirectory}/${buildLabel}"><include name="**/emf-${subprojectName}-junit-tests*.zip"/></fileset>
+    <mkdir dir="${workingDirectory}/eclipse/dropins/eclipse" />
+	<unzip dest="${workingDirectory}/eclipse/dropins/" overwrite="true">
+		<fileset dir="${buildDirectory}/${buildLabel}">
+			<include name="**/emf-${subprojectName}-junit-tests*.zip"/>
+		</fileset>
 	</unzip>
 	
 	<!-- create top level testing directory-->    
@@ -228,16 +229,16 @@
    	     This is so that contributors of test.xml's do not have to update their paths to 
    	     library.xml in org.eclipse.test whenever its version is updated.
    	 -->
-   	<move todir="${workingDirectory}/eclipse/plugins/org.eclipse.test">
-    		<fileset dir="${workingDirectory}/eclipse/plugins/${org.eclipse.test}" />
+		<move todir="${workingDirectory}/eclipse/dropins/eclipse/plugins/org.eclipse.test">
+			<fileset dir="${workingDirectory}/eclipse/dropins/eclipse/plugins/${org.eclipse.test}" />
   	</move>
   	
   	<!--the Ant move task leaves behind an empty directory-->
-  	<delete dir="${workingDirectory}/eclipse/plugins/${org.eclipse.test}" includeEmptyDirs="true" />
+		<delete dir="${workingDirectory}/eclipse/dropins/eclipse/plugins/${org.eclipse.test}" includeEmptyDirs="true" />
 	
  	<!-- rezip the JUnit plugin tests -->
-	<zip destfile="${workingDirectory}/testing/emf-${subprojectName}-junit-tests-${buildAlias}.zip">
-		 <zipfileset dir="${workingDirectory}/eclipse" prefix="eclipse"/>
+		<zip destfile="${workingDirectory}/testing/gmf-notation-junit-tests-${buildAlias}.zip">
+			<zipfileset dir="${workingDirectory}/eclipse/dropins/eclipse" prefix="eclipse" />
 	</zip>
  	
  	<!--Copy scripts and doc used in the automated testing to the testing directory-->
