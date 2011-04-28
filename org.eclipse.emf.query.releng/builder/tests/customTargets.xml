@@ -173,16 +173,19 @@
 <!-- ===================================================================== -->
 <!-- Helper targets -->
 <!-- ===================================================================== -->
-<target name="gatherLogs" if="logsAvailable">
+<target name="gatherLogs">
 	<mkdir dir="${buildDirectory}/${buildLabel}/compilelogs" />
 	<antcall target="allElements">
 		<param name="target" value="gatherLogs" />
 	</antcall>
 
 	<unzip dest="${buildDirectory}/${buildLabel}/compilelogs" overwrite="true">
-		<fileset dir="${buildDirectory}/features/org.eclipse.emf.${subprojectName}.tests">
-			<include name="*.log.zip" />
+		<fileset dir="${buildDirectory}/features">
+			<include name="**/org.eclipse.emf.${subprojectName}.tests*/*.log.zip" />
 		</fileset>
+		<patternset>
+			<exclude name="**/org.eclipse.test*/**"/>
+		</patternset>
 	</unzip>
 </target>
 

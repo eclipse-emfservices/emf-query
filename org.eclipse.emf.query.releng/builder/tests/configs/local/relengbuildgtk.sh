@@ -1,19 +1,60 @@
+#*******************************************************************************
+# Copyright (c) 2005, 2011 IBM Corporation and others.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Eclipse Public License v1.0
+# which accompanies this distribution, and is available at
+# http://www.eclipse.org/legal/epl-v10.html
+#
+# Contributors:
+#     IBM Corporation - initial API and implementation
+#*******************************************************************************
 #!/bin/bash
 
 echo -n "[relengbuild] $0 started on: `date +%Y%m%d\ %H\:%M\:%S`";
 
 # environment variables
-PATH=.:/bin:/usr/bin:/usr/bin/X11:/usr/local/bin:/usr/X11R6/bin:`pwd`/../linux;export PATH
-
+export PATH=/usr/local/bin:/usr/bin:/usr/bin/X11:/usr/X11R6/bin:/bin:/opt/gnome/bin:/usr/lib/mit/bin:/usr/lib/mit/sbin:.:`pwd`/../linux:/tmp
 export USERNAME=`whoami`
 echo " running as $USERNAME";
-echo " currently in dir: `pwd`";
+echo " with PATH = $PATH";
+echo " in dir `pwd`";
+
+# fix for org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed]
+# fix for Failed to invoke suite():org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed]
+export CVS_RSH=ssh
+ulimit -c unlimited; # set corefile size to unlimited
+
+echo "Set JAVA_HIGH_ZIPFDS=500 & LANG=C";
+export JAVA_HIGH_ZIPFDS=500
+export LANG=C
+
+# configure X server thread for tests; see http://wiki.eclipse.org/Modeling_Project_Releng/Building_Zips_And_Jars#UI_Testing
+xport=15; # should be a unique port number to avoid collisions
+echo "Start Xvfb on :${xport}"
+Xvfb :${xport} -ac & # -screen 0 1024x768x16 -ac &
+export DISPLAY=localhost:${xport}.0
+xhost +
+
+#startkde &
+#sleep 40
+# xwd -silent -display :${xport} -root -out /tmp/snap.xwd; # save a snapshot
+
+readPropertyOut="";
+readProperty ()
+{
+	readPropertyOut="";
+	file=$1
+	property=$2
+	readPropertyOut=$(grep $property $file | egrep -v "^#" | tail -1 | sed -e "s/$property=//");
+}
 
 if [[ ! $JAVA_HOME ]]; then
 	echo -n "[relengbuild] Get JAVA_HOME from build.cfg ... ";
 	buildcfg=$PWD/../../../build.cfg;
-	export JAVA_HOME=$(grep "JAVA_HOME=" $buildcfg | egrep -v "^#" | tail -1 | sed -e "s/JAVAHOME=//");
-	echo "$JAVA_HOME";
+	readProperty $buildcfg JAVA_HOME
+	JAVA_HOME="$readPropertyOut";
+	javaHome="$readPropertyOut";
+	echo $JAVA_HOME
 fi
 
 Xflags="";
@@ -70,34 +111,9 @@ execCmd ()
 	fi
 }
 
-doFunction ()
-{
-	cmd=$1;
-	params=$2
-	for pth in "." "/bin" "/usr/bin" "/usr/bin/X11" "/usr/local/bin" "/usr/X11R6/bin" "`pwd`/../linux" ; do
-		defined=0;
-		checkIfDefined $pth/$cmd
-		if [ $defined -eq 1 ] ; then
-			$cmd $params
-			sleep 3
-			break;
-		fi
-	done
-	if [ $defined -eq 0 ] ; then
-		echo "$cmd is not defined (command not found)";
-	fi
-}
-
-# these don't work on emf.torolab server, so not point wrapping them to say so when we can just omit
-# doFunction Xvfb ":42 -screen 0 1024x768x24 -ac & "
-# doFunction Xnest ":43 -display :42 -depth 24 & "
-# doFunction fvwm2 "-display localhost:43.0 & "
-#export DISPLAY=$HOSTNAME:43.0
-#ulimit -c unlimited
-
 getBuildID()
-{	# given $PWD: /home/www-data/build/modeling/$projectName/$subprojectName/downloads/drops/1.1.0/N200502112049/testing/N200502112049/testing
-	# return N200502110400
+{	# given $PWD: /home/www-data/build/modeling/$projectName/$subprojectName/downloads/drops/1.1.0/N200702112049/testing/N200702112049/testing
+	# return N200702110400
 	buildID=$1; #echo "buildID=$buildID";
 	buildID=${buildID##*drops\/}; # trim up to drops/ (from start) (substring notation)
 	buildID=${buildID%%\/test*}; # trim off /test (to end) (substring notation)
@@ -106,7 +122,7 @@ getBuildID()
 buildID=""; getBuildID $PWD; #echo buildID=$buildID;
 
 getBranch()
-{	# given $PWD: /home/www-data/build/modeling/$projectName/$subprojectName/downloads/drops/1.1.0/N200502112049/testing/N200502112049/testing
+{	# given $PWD: /home/www-data/build/modeling/$projectName/$subprojectName/downloads/drops/1.1.0/N200702112049/testing/N200702112049/testing
 	# return 1.1.0
 	branch=$1; #echo "branch=$branch";
 	branch=${branch##*drops\/}; # trim up to drops/ (from start) (substring notation)
@@ -116,13 +132,34 @@ branch=""; getBranch $PWD; #echo branch=$branch;
 
 ############################# BEGIN RUN TESTS #############################  
 
-
 # operating system, windowing system and architecture variables
 # for *nix systems, os, ws and arch values must be specified
 Dflags=$Dflags" "-Dplatform=linux.gtk
 os=linux
 ws=gtk
 arch=x86
+if uname -m > /dev/null 2>&1; then
+	arch=`uname -m`
+else
+	arch=`uname -p`
+fi
+# Massage arch for Eclipse-uname differences
+case $arch in
+	i[0-9]*86)
+		arch=x86 ;;
+	ia64)
+		arch=ia64 ;;
+	ppc)
+		arch=ppc ;;
+	ppc64)
+		arch=ppc ;;
+	x86_64)
+		# Always use x86 for x86_64 machines.
+		arch=x86 ;;
+	*)
+	echo "ERROR: Unrecognized architecture:  $arch"
+	exit 1 ;;
+esac
 
 # default value to determine if eclipse should be reinstalled between running of tests
 installmode="clean"
@@ -169,42 +206,48 @@ for sdk in $sdks; do
 	fi
 done
 
-J2SE15flags="";
-# TODO: if a 1.5 JDK and want source/target = 1.5, leave these in
-# TODO: if source/target = 1.4, remove these!
-if [ ${JAVA_HOME##*1.5*}"" = "" -o ${JAVA_HOME##*15*}"" = "" -o ${JAVA_HOME##*5.0*}"" = "" -o ${JAVA_HOME##*50*}"" = "" ]; then
-	# set J2SE-1.5 properties (-Dflags)
-	bootclasspath="."`find $JAVA_HOME/jre/lib -name "*.jar" -printf ":%p"`;
-	J2SE15flags=$J2SE15flags" -DJ2SE-1.5=$bootclasspath"
-	J2SE15flags=$J2SE15flags" -DbundleBootClasspath=$bootclasspath"
-	J2SE15flags=$J2SE15flags" -DjavacSource=1.5"
-	J2SE15flags=$J2SE15flags" -DjavacTarget=1.5"
-	J2SE15flags=$J2SE15flags" -DbundleJavacSource=1.5"
-	J2SE15flags=$J2SE15flags" -DbundleJavacTarget=1.5"
+J2SE16flags="";
+# TODO: if a 1.6 JDK and want source/target = 1.6, leave these in
+# TODO: if source/target = 1.6, remove these!
+#if [ ${JAVA_HOME##*1.6*}"" = "" -o ${JAVA_HOME##*16*}"" = "" -o ${JAVA_HOME##*6.0*}"" = "" -o ${JAVA_HOME##*60*}"" = "" ]; then
+#	# set JavaSE-1.6 properties (-Dflags)
+#	bootclasspath="."`find $JAVA_HOME/jre/lib -name "*.jar" -printf ":%p"`;
+#	J2SE16flags=$J2SE16flags" -DJavaSE-1.6=$bootclasspath"
+#	J2SE16flags=$J2SE16flags" -DbundleBootClasspath=$bootclasspath"
+#	J2SE16flags=$J2SE16flags" -DjavacSource=1.6"
+#	J2SE16flags=$J2SE16flags" -DjavacTarget=1.6"
+#	J2SE16flags=$J2SE16flags" -DbundleJavacSource=1.6"
+#	J2SE16flags=$J2SE16flags" -DbundleJavacTarget=1.6"
+#fi
+
+# different ways to get the launcher and Main class
+if [[ -f eclipse/startup.jar ]]; then 
+  cpAndMain="eclipse/startup.jar org.eclipse.core.launcher.Main"; # up to M4_33
+elif [[ -f eclipse/plugins/org.eclipse.equinox.launcher.jar ]]; then
+  cpAndMain="eclipse/plugins/org.eclipse.equinox.launcher.jar org.eclipse.equinox.launcher.Main"; # M5_33
+else
+  cpAndMain=`find eclipse/ -name "org.eclipse.equinox.launcher_*.jar" | sort | head -1`" org.eclipse.equinox.launcher.Main"; 
 fi
 
-# default classpath
-# up to Eclipse 3.3M4, use eclipse/startup.jar
-# after Eclipse 3.3M4, use eclipse/plugins/org.eclipse.equinox.launcher_*.jar
-cp=`find eclipse/ -name "org.eclipse.equinox.launcher_*.jar" | sort | head -1`
+# add swt jars
+#cpAndMain=`find eclipse/ -name "org.eclipse.swt_*.jar" | sort | head -1`":"$cpAndMain; 
+#cpAndMain=`find eclipse/ -name "org.eclipse.swt.gtk.linux.${arch}_*.jar" | sort | head -1`":"$cpAndMain; 
 
 # run tests
 echo "[runtests] [`date +%H\:%M\:%S`] Launching Eclipse (installmode = $installmode with -enableassertions turned on) ..."
-execCmd "$JAVA_HOME/bin/java $Xflags -enableassertions -cp $cp org.eclipse.equinox.launcher.Main -ws $ws -os $os -arch $arch \
+execCmd "$JAVA_HOME/bin/java $Xflags -enableassertions -cp $cpAndMain -ws $ws -os $os -arch $arch \
 -application org.eclipse.ant.core.antRunner -data $workspaceDir -file test.xml $antTestTarget \
-$Dflags -Dws=$ws -Dos=$os -Darch=$arch -D$installmode=true $J2SE15flags \
+$Dflags -Dws=$ws -Dos=$os -Darch=$arch -D$installmode=true $J2SE16flags \
 $properties -logger org.apache.tools.ant.DefaultLogger" $consolelog;
 echo "[runtests] [`date +%H\:%M\:%S`] Eclipse test run completed. "
 
+# xwd -silent -display :${xport} -root -out /tmp/snap.xwd; # save a snapshot
+
 ############################# END RUN TESTS #############################  
 
-# supress errors by checking for the file first
-if [ -r /tmp/.X43-lock ] ; then
-	kill `cat /tmp/.X43-lock`
-fi
-if [ -r /tmp/.X42-lock ] ; then
-	kill `cat /tmp/.X42-lock`
-fi
+# drop X server process threads used by tests
+if [[ -r /tmp/.X${xport}-lock ]]; then kill `cat /tmp/.X${xport}-lock`; fi
+if [[ -f /tmp/.X${xport}-lock ]]; then rm -fr /tmp/.X${xport}-lock; fi
 
 if [[ ! -d $PWD/results ]]; then
 	echo "[relengbuild] No test results found in $PWD/results!";
@@ -213,12 +256,13 @@ if [[ ! -d $PWD/results ]]; then
 else
 # if the build failed for some reason, don't clean up!
 xmls=`find $PWD/results/xml -name "*.xml"`;
-testsFailed=1;
+testsPassed="maybe";
 for xml in $xmls; do
-	if [ $testsFailed -eq 1 ]; then
-		testsFailed=`cat $xml | grep -c "<testsuite errors=\"0\" failures=\"0\""`
-		if [ $testsFailed -lt 1 ]; then
-			echo "[relengbuild] Found test failure(s) in $xml!";
+	if [[ $testsPassed ]]; then
+		testsPassed=$(cat $xml | grep "<testsuite " | grep " errors=\"0\"" | grep " failures=\"0\"");
+		if [[ ! $testsPassed ]]; then
+			echo "[relengbuild] Found test failure(s) in $xml: "
+			echo "  "$(cat $xml | grep "<testsuite ");
 			echo "[relengbuild] Creating 'noclean' file to prevent cleanup after build completes."
 			echo "1" > $PWD/../../../noclean;
 			break;
