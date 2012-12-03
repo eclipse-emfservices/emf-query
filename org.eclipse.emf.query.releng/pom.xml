@@ -156,14 +156,9 @@
 
 	<repositories>
 		<repository>
-			<id>juno</id>
+			<id>kepler</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/juno</url>
-		</repository>
-		<repository>
-			<id>eclipse-sdk</id>
-			<url>http://download.eclipse.org/eclipse/updates/4.2/</url>
-			<layout>p2</layout>
+			<url>http://download.eclipse.org/releases/staging</url>
 		</repository>
 	</repositories>
 
