@@ -193,6 +193,7 @@
 		<module>../org.eclipse.emf.query.master-feature</module>
 		<module>../org.eclipse.emf.query.ocl-feature</module>
 		<module>../org.eclipse.emf.query.sdk-feature</module>
+		<module>../org.eclipse.emf.query.repository</module>
 	</modules>
 
 </project>
