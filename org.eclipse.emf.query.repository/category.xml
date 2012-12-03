@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.eclipse.emf.query_1.6.0.qualifier.jar" id="org.eclipse.emf.query" version="1.6.0.qualifier">
+   <feature url="features/org.eclipse.emf.query_1.7.0.qualifier.jar" id="org.eclipse.emf.query" version="1.7.0.qualifier">
       <category name="emf-query"/>
    </feature>
-   <feature url="features/org.eclipse.emf.query.doc_1.6.0.qualifier.jar" id="org.eclipse.emf.query.doc" version="1.6.0.qualifier">
+   <feature url="features/org.eclipse.emf.query.doc_1.7.0.qualifier.jar" id="org.eclipse.emf.query.doc" version="1.7.0.qualifier">
       <category name="emf-query"/>
    </feature>
-   <feature url="features/org.eclipse.emf.query.examples_1.6.0.qualifier.jar" id="org.eclipse.emf.query.examples" version="1.6.0.qualifier">
+   <feature url="features/org.eclipse.emf.query.examples_1.7.0.qualifier.jar" id="org.eclipse.emf.query.examples" version="1.7.0.qualifier">
       <category name="emf-query"/>
    </feature>
-   <feature url="features/org.eclipse.emf.query.examples.source_1.6.0.qualifier.jar" id="org.eclipse.emf.query.examples.source" version="1.6.0.qualifier">
+   <feature url="features/org.eclipse.emf.query.examples.source_1.7.0.qualifier.jar" id="org.eclipse.emf.query.examples.source" version="1.7.0.qualifier">
       <category name="emf-query"/>
    </feature>
-   <feature url="features/org.eclipse.emf.query.master_1.6.0.qualifier.jar" id="org.eclipse.emf.query.master" version="1.6.0.qualifier">
+   <feature url="features/org.eclipse.emf.query.master_1.7.0.qualifier.jar" id="org.eclipse.emf.query.master" version="1.7.0.qualifier">
       <category name="emf-query"/>
    </feature>
-   <feature url="features/org.eclipse.emf.query.ocl_1.6.0.qualifier.jar" id="org.eclipse.emf.query.ocl" version="1.6.0.qualifier">
+   <feature url="features/org.eclipse.emf.query.ocl_1.7.0.qualifier.jar" id="org.eclipse.emf.query.ocl" version="1.7.0.qualifier">
       <category name="emf-query"/>
    </feature>
-   <feature url="features/org.eclipse.emf.query.ocl.source_1.6.0.qualifier.jar" id="org.eclipse.emf.query.ocl.source" version="1.6.0.qualifier">
+   <feature url="features/org.eclipse.emf.query.ocl.source_1.7.0.qualifier.jar" id="org.eclipse.emf.query.ocl.source" version="1.7.0.qualifier">
       <category name="emf-query"/>
    </feature>
-   <feature url="features/org.eclipse.emf.query.sdk_1.6.0.qualifier.jar" id="org.eclipse.emf.query.sdk" version="1.6.0.qualifier">
+   <feature url="features/org.eclipse.emf.query.sdk_1.7.0.qualifier.jar" id="org.eclipse.emf.query.sdk" version="1.7.0.qualifier">
       <category name="emf-query"/>
    </feature>
-   <feature url="features/org.eclipse.emf.query.source_1.6.0.qualifier.jar" id="org.eclipse.emf.query.source" version="1.6.0.qualifier">
+   <feature url="features/org.eclipse.emf.query.source_1.7.0.qualifier.jar" id="org.eclipse.emf.query.source" version="1.7.0.qualifier">
       <category name="emf-query"/>
    </feature>
-   <feature url="features/org.eclipse.emf.query.tests_1.6.0.qualifier.jar" id="org.eclipse.emf.query.tests" version="1.6.0.qualifier">
+   <feature url="features/org.eclipse.emf.query.tests_1.7.0.qualifier.jar" id="org.eclipse.emf.query.tests" version="1.7.0.qualifier">
       <category name="emf-query"/>
    </feature>
    <category-def name="emf-query" label="EMF Query">
