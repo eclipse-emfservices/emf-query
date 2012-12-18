@@ -170,6 +170,11 @@
 			<url>http://download.eclipse.org/eclipse/updates/4.3milestones/S-4.3M4-201212140730</url>
 			<layout>p2</layout>
 		</repository>
+		<repository>
+			<id>ocl core</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/modeling/mdt/ocl/updates/milestones/4.1.0/core/S201211120542</url>
+		</repository>
 	</repositories>
 
 	<pluginRepositories>
