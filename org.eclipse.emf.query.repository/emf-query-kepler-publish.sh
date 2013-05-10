@@ -143,7 +143,7 @@ echo "Copied $localUpdateSite to local directory update-site."
 if [ "$dropFiles" = y ]; then
 	echo "Converting update site to runnable form"
 	./eclipse/eclipse -nosplash -consoleLog -application org.eclipse.equinox.p2.repository.repo2runnable -source file:update-site -destination file:drops/eclipse
-	qualifiedVersion=$(find drops/eclipse/features/ -maxdepth 1 | grep "org.eclipse.gmf_")
+	qualifiedVersion=$(find drops/eclipse/features/ -maxdepth 1 | grep "org.eclipse.emf.query_")
 	echo "qualifiedVersion is $qualifiedVersion"
 	qualifiedVersion=${qualifiedVersion#*_}
 	echo "qualifiedVersion is $qualifiedVersion"
@@ -222,7 +222,7 @@ if [ "$dropFiles" = y ]; then
 				
 	cd ../update-site
 
-	zip -r ../$localDropDir/emf-query-Update-$version.zip features plugins artifacts.jar content.jar
+	zip -r ../$localDropDir/emf-query-Update-$version.zip features plugins binary artifacts.jar content.jar
 	md5sum ../$localDropDir/emf-query-Update-$version.zip > ../$localDropDir/emf-query-Update-$version.zip.md5
 	echo "Created emf-query-Update-Site-$version.zip"
 	cd ..
@@ -232,7 +232,7 @@ if [ "$dropFiles" = y ]; then
 	echo "hudson.job.id=$buildId (${jobDir##*/})" >> $localDropDir/build.cfg
 	echo "hudson.job.url=https://hudson.eclipse.org/hudson/job/$jobName/$buildId" >> $localDropDir/build.cfg
 
-	remoteDropDir=/home/data/httpd/download.eclipse.org/modeling/gmp/gmf-runtime/downloads/drops/$dropDir
+	remoteDropDir=/home/data/httpd/download.eclipse.org/modeling/emf/query/downloads/drops/$dropDir
 	mkdir -p $remoteDropDir
 	cp -R $localDropDir/* $remoteDropDir/
 fi
