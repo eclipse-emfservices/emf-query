@@ -20,7 +20,7 @@
 
 	<profiles>
 		<profile>
-			<id>mars.target</id>
+			<id>emf-query.target</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
@@ -42,7 +42,7 @@
 										<artifact>
 											<file>emf-query.target</file>
 											<type>target</type>
-											<classifier>mars</classifier>
+											<classifier>emf-query</classifier>
 										</artifact>
 									</artifacts>
 								</configuration>
