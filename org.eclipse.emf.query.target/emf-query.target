@@ -8,10 +8,10 @@
 <repository location="http://download.eclipse.org/eclipse/updates/4.5milestones"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.emf.edit.feature.group" version="2.11.0.v20150318-0449"/>
-<unit id="org.eclipse.emf.examples.feature.group" version="2.11.0.v20150318-0449"/>
-<unit id="org.eclipse.emf.sdk.feature.group" version="2.11.0.v20150318-0449"/>
-<unit id="org.eclipse.emf.ecore.edit.feature.group" version="2.9.0.v20150318-0449"/>
+<unit id="org.eclipse.emf.edit.feature.group" version="2.11.0.v20150323-0420"/>
+<unit id="org.eclipse.emf.examples.feature.group" version="2.11.0.v20150323-0420"/>
+<unit id="org.eclipse.emf.sdk.feature.group" version="2.11.0.v20150323-0420"/>
+<unit id="org.eclipse.emf.ecore.edit.feature.group" version="2.9.0.v20150323-0420"/>
 <repository location="http://download.eclipse.org/modeling/emf/emf/updates/2.11milestones"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
