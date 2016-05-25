@@ -130,13 +130,10 @@ else
 	echo "`date +%Y-%m-%d-%H:%M:%S` version is now $version"
 fi
 				
-cp eclipse/epl-v10.html drops/eclipse
-cp eclipse/notice.html drops/eclipse
 cd drops
 
 # emf query SDK
 zip -r ../$localDropDir/emf-query-SDK-$version.zip \
-	eclipse/epl-v10.html eclipse/notice.html \
 	eclipse/features/org.eclipse.emf.query_* \
 	eclipse/features/org.eclipse.emf.query.doc_* \
 	eclipse/features/org.eclipse.emf.query.ocl_* \
@@ -153,7 +150,6 @@ echo "`date +%Y-%m-%d-%H:%M:%S` Created emf-query-SDK-$version.zip"
 			
 # emf-query runtime
 zip -r ../$localDropDir/emf-query-runtime-$version.zip \
-	eclipse/epl-v10.html eclipse/notice.html \
 	eclipse/features/org.eclipse.emf.query_* \
 	eclipse/features/org.eclipse.emf.query.ocl_* \
 	eclipse/plugins/org.eclipse.emf.query_* \
@@ -163,7 +159,6 @@ echo "`date +%Y-%m-%d-%H:%M:%S` Created emf-query-runtime-$version.zip"
 			
 # emf-query examples
 zip -r ../$localDropDir/emf-query-examples-$version.zip \
-	eclipse/epl-v10.html eclipse/notice.html \
 	eclipse/features/org.eclipse.emf.query.examples_* \
 	eclipse/features/org.eclipse.emf.query.examples.source_* \
 	eclipse/plugins/org.eclipse.emf.query.examples_* \
@@ -177,7 +172,6 @@ echo "`date +%Y-%m-%d-%H:%M:%S` Created emf-query-examples-$version.zip"
 			
 # emf-query automated-tests
 zip -r ../$localDropDir/emf-query-automated-tests-$version.zip \
-	eclipse/epl-v10.html eclipse/notice.html \
 	eclipse/features/org.eclipse.emf.query.tests_* \
 	eclipse/plugins/org.eclipse.emf.query.tests_* \
 	eclipse/plugins/org.eclipse.emf.query.ocl.tests_*
