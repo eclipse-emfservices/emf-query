@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
-<plugin
->
+<plugin>
+
+  <!--
    <extension
          point="org.eclipse.help.toc">
       <toc
@@ -10,22 +11,28 @@
             category="org.eclipse.emf.qtv"/>
       <index path="index"/>
    </extension>
-   
+   -->
+
  <!-- ============================= -->
  <!-- Define TOCs                   -->
  <!-- ============================= -->
 
+ <!--
  <extension point="org.eclipse.help.toc">
    <toc file="topics_Reference.xml" />
  </extension>
+ -->
 
  <!-- ============================= -->
  <!-- Define Javadoc locations      -->
  <!-- ============================= -->
-  <extension point="org.eclipse.pde.core.javadoc">
-      <javadoc path="references/javadoc"> <!-- defaults to reference/api -->
+
+ <!--
+ <extension point="org.eclipse.pde.core.javadoc">
+      <javadoc path="references/javadoc">
           <plugin id="org.eclipse.emf.query"/>
           <plugin id="org.eclipse.emf.query.ocl"/>
       </javadoc>
-  </extension>
+      </extension>
+  -->
 </plugin>
