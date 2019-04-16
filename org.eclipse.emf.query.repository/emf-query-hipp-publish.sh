@@ -242,7 +242,8 @@ echo "`date +%Y-%m-%d-%H:%M:%S` Publishing local $stagedUpdateSite directory to 
 mkdir -p $remoteUpdateSite
 cp -R $stagedUpdateSite $remoteUpdateSite
 
-echo "`date +%Y-%m-%d-%H:%M:%S` Update the composite update site"
+echo "`date +%Y-%m-%d-%H:%M:%S` Refresh the composite update site"
+rm -f compositeArtifacts.jar compositeContents.jar
 ./eclipse/eclipse -nosplash --launcher.suppressErrors -clean -debug -application org.eclipse.ant.core.antRunner -buildfile p2.composite.repository.xml default
 
 # Clean up
