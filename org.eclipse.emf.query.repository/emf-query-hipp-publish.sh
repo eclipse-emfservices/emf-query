@@ -217,7 +217,7 @@ cat > p2.composite.repository.xml <<EOF
 <project name="p2 composite repository">
 <target name="default">
 <p2.composite.repository>
-<repository compressed="true" location="${remoteUpdateSite}" name="${JOB_NAME}"/>
+<repository compressed="true" location="${remoteUpdateSite}" name="${JOB_NAME}" append="false"/>
 <add>
 <repository location="${dropDir}"/>
 </add>
@@ -243,7 +243,6 @@ mkdir -p $remoteUpdateSite
 cp -R $stagedUpdateSite $remoteUpdateSite
 
 echo "`date +%Y-%m-%d-%H:%M:%S` Refresh the composite update site"
-rm -f ${remoteUpdateSite}/compositeArtifacts.jar ${remoteUpdateSite}/compositeContents.jar
 ./eclipse/eclipse -nosplash --launcher.suppressErrors -clean -debug -application org.eclipse.ant.core.antRunner -buildfile p2.composite.repository.xml default
 
 # Clean up
