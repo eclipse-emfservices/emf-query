@@ -282,4 +282,4 @@ ssh "$SSH_ACCOUNT" rm -f ${remoteUpdateSite}/compositeArtifacts.xml ${remoteUpda
 echo "$(date +%Y-%m-%d-%H:%M:%S) Composite entries: $entries"
 
 create_composite "EMF Query" . $entries
-scp composite*xml ${remoteUpdateSite}
+scp composite*xml "$SSH_ACCOUNT:${remoteUpdateSite}"
