@@ -69,7 +69,7 @@ remoteUpdateSiteBase="modeling/emf/query/updates/$remoteSite"
 remoteUpdateSite="/home/data/httpd/download.eclipse.org/$remoteUpdateSiteBase"
 echo "`date +%Y-%m-%d-%H:%M:%S` Publishing to remote update-site: $remoteUpdateSite"
 
-if [ -z "$dropFilesLabel" -a "$buildType" != i  -a "$buildType" != I -a "$buildType" != r  -a "$buildType" != R]; then
+if [ -z "$dropFilesLabel" -a "$buildType" != i  -a "$buildType" != I -a "$buildType" != r  -a "$buildType" != R ]; then
 	echo "Please provide a drop files label to append to the version (e.g. M5, RC1) if this is not an I or R build."
 	exit 0
 fi
@@ -197,8 +197,8 @@ echo "hudson.job.id=${BUILD_NUMBER} (${jobDir##*/})" >> $localDropDir/build.cfg
 echo "hudson.job.url=${BUILD_URL}" >> $localDropDir/build.cfg
 
 remoteDropDir=/home/data/httpd/download.eclipse.org/modeling/emf/query/downloads/$localDropDir
-mkdir -p $remoteDropDir
-cp -R $localDropDir/* $remoteDropDir/
+ssh "$SSH_ACCOUNT" mkdir -p $remoteDropDir
+scp -R $localDropDir/* "$SSH_ACCOUNT:$remoteDropDir/"
 echo "`date +%Y-%m-%d-%H:%M:%S` Published drop files in local directory $tmpDir/$localDropDir to $remoteDropDir"
 
 # Ensure p2.mirrorURLs property is used in update site
