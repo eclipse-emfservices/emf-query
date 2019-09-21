@@ -213,45 +213,69 @@ if [ ! -e "$stagedUpdateSite/p2.index" ]; then
 	echo "artifact.repository.factory.order = artifacts.xml,\!" >> $stagedUpdateSite/p2.index
 fi
 
-# Create the composite update site
-echo "`date +%Y-%m-%d-%H:%M:%S` Create the composite update site repository file and add ${dropDir}."
-cat > p2.composite.repository.xml <<EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<project name="p2 composite repository">
-  <target name="default">
-    <p2.composite.repository>
-      <repository compressed="true" location="${remoteUpdateSite}" name="${JOB_NAME}" append="false"/>
-      <add>
-        <repository location="${dropDir}"/>
-      </add>
-    </p2.composite.repository>
-  </target>
-</project>
-EOF
-
-# Backup then clean remote update site
-if ssh "$SSH_ACCOUNT" test -d "$remoteUpdateSite" ; then
-	echo "`date +%Y-%m-%d-%H:%M:%S` Add existing update sites to the composite update site repository file."
-	for existingDropDir in `ssh "$SSH_ACCOUNT" find ${remoteUpdateSite}/ -mindepth 1 -maxdepth 1 -type d | sort | tail -n 4` ; do
-		addExistingDropDir=$(basename $existingDropDir)
-		echo "`date +%Y-%m-%d-%H:%M:%S` Add ${addExistingDropDir}."
-		addRepositoryLocation="<repository location=\"${addExistingDropDir}\"/>"
-		sed -i "/<add>/a\
-${addRepositoryLocation}" p2.composite.repository.xml
-	done
-fi
-
+# Publish the new repository
 echo "`date +%Y-%m-%d-%H:%M:%S` Publishing local $stagedUpdateSite directory to remote update site $remoteUpdateSite/$dropDir"
 ssh "$SSH_ACCOUNT" mkdir -p $remoteUpdateSite
 scp -r $stagedUpdateSite "$SSH_ACCOUNT":$remoteUpdateSite
 
-echo "`date +%Y-%m-%d-%H:%M:%S` Refresh the composite update site"
-ssh "$SSH_ACCOUNT" rm ${remoteUpdateSite}/compositeArtifacts.jar ${remoteUpdateSite}/compositeContent.jar
-ssh "$SSH_ACCOUNT" ls ${remoteUpdateSite}
-./eclipse/eclipse -nosplash --launcher.suppressErrors -clean -debug -application org.eclipse.ant.core.antRunner -buildfile p2.composite.repository.xml default
+# Create the composite, with references only to the N=5 most recent builds (if nightly)
 
-# Clean up
-echo "`date +%Y-%m-%d-%H:%M:%S` Cleaning up"
-#rm -fr eclipse
-#rm -fr update-site
+create_composite() {
+    local name="$1"
+    shift
+    local location="$1"
+    shift
 
+    cat > "$location"/compositeArtifacts.xml <<EOF
+<?xml version='1.0' encoding='UTF-8'?>
+<?compositeArtifactRepository version='1.0.0'?>
+<repository name='$name' type='org.eclipse.equinox.internal.p2.artifact.repository.CompositeArtifactRepository' version='1.0.0'>
+  <properties size='$#'>
+    <property name='p2.timestamp' value='$P2_TIMESTAMP'/>
+  </properties>
+  <children size='$#'>
+EOF
+
+    cat > "$location"/compositeContent.xml <<EOF
+<?xml version='1.0' encoding='UTF-8'?>
+<?compositeMetadataRepository version='1.0.0'?>
+<repository name='$name' type='org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository' version='1.0.0'>
+  <properties size='$#'>
+    <property name='p2.timestamp' value='$P2_TIMESTAMP'/>
+  </properties>
+  <children size='$#'>
+EOF
+
+    for entry in "$@"; do
+        echo "    <child location='$entry'/>" >> "$location"/compositeArtifacts.xml
+        echo "    <child location='$entry'/>" >> "$location"/compositeContent.xml
+    done
+    
+    cat >> "$location"/compositeArtifacts.xml <<EOF
+  </children>
+</repository>
+EOF
+
+    cat >> "$location"/compositeContent.xml <<EOF
+  </children>
+</repository>
+EOF
+
+}
+
+entries=""
+if ssh "$SSH_ACCOUNT" test -d "$remoteUpdateSite" ; then
+    echo "$(date +%Y-%m-%d-%H:%M:%S) Add existing update sites to the composite update site repository file."
+    if [ "$buildType" != "$R" ]; then
+        entries="$(ssh "$SSH_ACCOUNT" find ${remoteUpdateSite}/ -mindepth 1 -maxdepth 1 -type d | sort | tail -n 5)"
+    else
+	entries="$(ssh "$SSH_ACCOUNT" find ${remoteUpdateSite}/ -mindepth 1 -maxdepth 1 -type d | sort)"
+    fi
+fi
+
+ssh "$SSH_ACCOUNT" rm -f ${remoteUpdateSite}/compositeArtifacts.jar ${remoteUpdateSite}/compositeContent.jar
+ssh "$SSH_ACCOUNT" rm -f ${remoteUpdateSite}/compositeArtifacts.xml ${remoteUpdateSite}/compositeContent.xml
+echo echo "$(date +%Y-%m-%d-%H:%M:%S) Composite entries: $entries"
+
+create_composite "EMF Query" . $entries
+scp composite*xml ${remoteUpdateSite}
