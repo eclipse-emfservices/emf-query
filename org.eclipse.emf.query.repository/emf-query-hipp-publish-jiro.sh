@@ -198,7 +198,7 @@ echo "hudson.job.url=${BUILD_URL}" >> $localDropDir/build.cfg
 
 remoteDropDir=/home/data/httpd/download.eclipse.org/modeling/emf/query/downloads/$localDropDir
 ssh "$SSH_ACCOUNT" mkdir -p $remoteDropDir
-scp -R $localDropDir/* "$SSH_ACCOUNT:$remoteDropDir/"
+scp -r $localDropDir/* "$SSH_ACCOUNT:$remoteDropDir/"
 echo "`date +%Y-%m-%d-%H:%M:%S` Published drop files in local directory $tmpDir/$localDropDir to $remoteDropDir"
 
 # Ensure p2.mirrorURLs property is used in update site
