@@ -267,15 +267,19 @@ entries=""
 if ssh "$SSH_ACCOUNT" test -d "$remoteUpdateSite" ; then
     echo "$(date +%Y-%m-%d-%H:%M:%S) Add existing update sites to the composite update site repository file."
     if [ "$buildType" != "$R" ]; then
-        entries="$(ssh "$SSH_ACCOUNT" find ${remoteUpdateSite}/ -mindepth 1 -maxdepth 1 -type d | sort | tail -n 5)"
+        for e in $(ssh "$SSH_ACCOUNT" find ${remoteUpdateSite}/ -mindepth 1 -maxdepth 1 -type d | sort | tail -n 5); do
+            entries="$entries $(basename $e)"
+        done
     else
-	entries="$(ssh "$SSH_ACCOUNT" find ${remoteUpdateSite}/ -mindepth 1 -maxdepth 1 -type d | sort)"
+        for e in $(ssh "$SSH_ACCOUNT" find ${remoteUpdateSite}/ -mindepth 1 -maxdepth 1 -type d | sort); do
+            entries="$entries $(basename $e)"
+        done
     fi
 fi
 
 ssh "$SSH_ACCOUNT" rm -f ${remoteUpdateSite}/compositeArtifacts.jar ${remoteUpdateSite}/compositeContent.jar
 ssh "$SSH_ACCOUNT" rm -f ${remoteUpdateSite}/compositeArtifacts.xml ${remoteUpdateSite}/compositeContent.xml
-echo echo "$(date +%Y-%m-%d-%H:%M:%S) Composite entries: $entries"
+echo "$(date +%Y-%m-%d-%H:%M:%S) Composite entries: $entries"
 
 create_composite "EMF Query" . $entries
 scp composite*xml ${remoteUpdateSite}
