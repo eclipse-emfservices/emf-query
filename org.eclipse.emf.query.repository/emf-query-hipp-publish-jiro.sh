@@ -88,7 +88,7 @@ tmpDir="$localTarget/$JOB_NAME-publish-tmp"
 rm -fr $tmpDir
 mkdir -p $tmpDir
 cd $tmpDir
-messsage "Working in $(pwd)"
+message "Working in $(pwd)"
 
 
 # Prepare local update site (merging is performed later, if required)
