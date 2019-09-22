@@ -90,11 +90,19 @@ mkdir -p $tmpDir
 cd $tmpDir
 message "Working in $(pwd)"
 
+# Compute dropDir
+qualifiedVersion=$(find "$localUpdateSite"/features/ -maxdepth 1 | grep "org.eclipse.emf.query_" | sed 's/.jar$//')
+qualifiedVersion=${qualifiedVersion#*_}
+qualifier=${qualifiedVersion##*.}
+qualifier=${qualifier#v}
+version=${qualifiedVersion%.*}
+dropDir="$(echo "$buildType" | tr '[:lower:]' '[:upper:]')$qualifier"
+message "dropDir is $dropDir"
 
 # Prepare local update site (merging is performed later, if required)
 stagedUpdateSite="updates/$remoteSite/$dropDir"
-mkdir -p $stagedUpdateSite
-cp -R $localUpdateSite/* $stagedUpdateSite
+mkdir -p "$stagedUpdateSite"
+cp -R "$localUpdateSite"/* "$stagedUpdateSite"
 message "Copied $localUpdateSite to local directory $stagedUpdateSite."
 
 # Append drop file suffix if one is specified
@@ -102,7 +110,7 @@ if [ -n "$dropFilesLabel" ]; then
     version=$version$dropFilesLabel
     message "version is now $version"
 elif [ "$buildType" != r -a "$buildType" != R ]; then
-    version="$(echo $buildType | tr '[:lower:]' '[:upper:]')$qualifier"
+    version="$(echo "$buildType" | tr '[:lower:]' '[:upper:]')$qualifier"
     message "version is now $version"
 else
     message "version is now $version"
@@ -111,7 +119,7 @@ fi
 # Publish the new repository
 message "Publishing local $stagedUpdateSite directory to remote update site $remoteUpdateSite/$dropDir"
 ssh "$SSH_ACCOUNT" mkdir -p $remoteUpdateSite
-scp -r $stagedUpdateSite "$SSH_ACCOUNT":$remoteUpdateSite
+scp -r "$stagedUpdateSite" "$SSH_ACCOUNT:$remoteUpdateSite"
 
 # Create/refresh the composite, with references only to the N=5 most recent builds (if nightly)
 
